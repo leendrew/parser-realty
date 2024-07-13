@@ -7,11 +7,8 @@ node_modules
 venv
 
 # Local env files
-.env
-.env.local
-.env.development.local
-.env.test.local
-.env.production.local
+.env*
+!.env.example
 
 # Testing
 coverage
@@ -35,9 +32,7 @@ yarn-debug.log*
 yarn-error.log*
 
 # Misc
+.vscode
+.idea
 .DS_Store
 *.pem
-
-# .env
-.env*
-!.env.example
