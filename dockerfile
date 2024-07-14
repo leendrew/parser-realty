@@ -9,9 +9,9 @@ COPY . .
 
 FROM builder AS runner
 WORKDIR /app
-ARG BUILD_ENV
-COPY --from=builder /app/.env.${BUILD_ENV} ./.env
+ARG APP_ENV
+COPY --from=builder /app/.env.${APP_ENV} ./.env
 COPY --from=builder /app/src ./src
 CMD ["python3", "./src/main.py"]
 
-# CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "80"]
+# CMD ["uvicorn", "main:app", "--host", "${APP_HOST}", "--port", "${APP_PORT}"]
