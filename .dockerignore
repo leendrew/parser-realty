@@ -1,0 +1,10 @@
+*.pyc
+.dockerignore
+.vscode
+.idea
+.git
+.git*
+venv
+makefile
+docker*
+*.md
