@@ -40,3 +40,15 @@ prod-up: compose-prod-up-app compose-prod-up-db
 
 dev-down:
 	docker compose -f ${COMPOSE_PATH_PROD} down
+
+migration-add:
+	alembic revision --autogenerate
+
+migration-up:
+	alembic upgrade head
+
+migration-down:
+	alembic downgrade -1
+
+migration-down-all:
+	alembic downgrade all
