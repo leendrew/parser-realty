@@ -12,6 +12,6 @@ WORKDIR /app
 ARG APP_ENV
 COPY --from=builder /app/.env.${APP_ENV} ./.env
 COPY --from=builder /app/src ./src
-CMD ["python3", "./src/main.py"]
+CMD ["python3", "-m", "src.main"]
 
-# CMD ["uvicorn", "main:app", "--host", "${APP_HOST}", "--port", "${APP_PORT}"]
+# CMD ["uvicorn", "src.main:app", "--host", "${APP_HOST}", "--port", "${APP_PORT}"]
