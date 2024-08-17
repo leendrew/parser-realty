@@ -1,7 +1,4 @@
-from typing import (
-  TYPE_CHECKING,
-  Optional,
-)
+from typing import TYPE_CHECKING
 from datetime import datetime
 from enum import Enum
 from sqlalchemy.orm import (
@@ -46,7 +43,7 @@ class ParsingResults(BaseModel):
     back_populates="parsing_result",
   )
 
-  city_metro_station_id: Mapped[Optional[int]] = mapped_column(
+  city_metro_station_id: Mapped[int | None] = mapped_column(
     SmallInteger,
     ForeignKey("cities_metro_stations.id"),
     nullable=True,
