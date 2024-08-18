@@ -38,7 +38,7 @@ prod-build: compose-prod-build-app compose-prod-build-db
 
 prod-up: compose-prod-up-app compose-prod-up-db
 
-dev-down:
+prod-down:
 	docker compose -f $(COMPOSE_PATH_PROD) down
 
 migration-add:
