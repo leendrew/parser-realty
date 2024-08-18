@@ -12,6 +12,7 @@ from src.api.search_links.search_links_types import SourceName
 from .base_model import BaseModel
 if TYPE_CHECKING:
   from . import UsersModel
+  from . import UsersSearchLinksModel
 
 class SearchLinks(BaseModel):
   id: Mapped[int] = mapped_column(
@@ -32,4 +33,9 @@ class SearchLinks(BaseModel):
   users: Mapped[list["UsersModel"]] = relationship(
     back_populates="search_links",
     secondary="users_search_links",
+  )
+
+  # o2m
+  user_search_link: Mapped[list["UsersSearchLinksModel"]] = relationship(
+    back_populates="search_link",
   )

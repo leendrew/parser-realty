@@ -29,8 +29,8 @@ class UsersSearchLinks(BaseModel):
     ForeignKey("users.id"),
   )
   # m2o
-  users: Mapped[list["UsersModel"]] = relationship(
-    back_populates="search_links",
+  user: Mapped["UsersModel"] = relationship(
+    back_populates="user_search_links",
   )
 
   search_link_id: Mapped[int] = mapped_column(
@@ -38,8 +38,8 @@ class UsersSearchLinks(BaseModel):
     ForeignKey("search_links.id"),
   )
   # m2o
-  search_links: Mapped[list["SearchLinksModel"]] = relationship(
-    back_populates="users",
+  search_link: Mapped["SearchLinksModel"] = relationship(
+    back_populates="user_search_links",
   )
 
   parsing_result: Mapped["ParsingResultsModel"] = relationship(

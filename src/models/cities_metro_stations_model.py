@@ -12,6 +12,7 @@ from .base_model import BaseModel
 if TYPE_CHECKING:
   from . import CitiesModel
   from . import MetroStationsModel
+  from . import ParsingResultsModel
 
 class CitiesMetroStations(BaseModel):
   id: Mapped[int] = mapped_column(
@@ -24,16 +25,21 @@ class CitiesMetroStations(BaseModel):
     SmallInteger,
     ForeignKey("cities.id"),
   )
-  # m2m
-  cities: Mapped[list["CitiesModel"]] = relationship(
-    back_populates="metro_stations",
+  # m2o
+  city: Mapped["CitiesModel"] = relationship(
+    back_populates="city_metro_stations",
   )
 
   metro_station_id: Mapped[int] = mapped_column(
     SmallInteger,
     ForeignKey("metro_stations.id"),
   )
-  # m2m
-  metro_stations: Mapped[list["MetroStationsModel"]] = relationship(
-    back_populates="cities",
+  # m2o
+  metro_station: Mapped["MetroStationsModel"] = relationship(
+    back_populates="city_metro_stations",
+  )
+
+  # o2o
+  parsing_result: Mapped["ParsingResultsModel"] = relationship(
+    back_populates="city_metro_station",
   )

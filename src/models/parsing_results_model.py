@@ -48,7 +48,9 @@ class ParsingResults(BaseModel):
     nullable=True,
   )
   # o2o
-  city_metro_station: Mapped["CitiesMetroStationsModel"] = relationship(back_populates="")
+  city_metro_station: Mapped["CitiesMetroStationsModel"] = relationship(
+    back_populates="parsing_result",
+  )
 
   direct_link: Mapped[str] = mapped_column(
     Text,
