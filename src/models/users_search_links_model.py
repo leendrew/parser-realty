@@ -42,6 +42,7 @@ class UsersSearchLinks(BaseModel):
     back_populates="user_search_links",
   )
 
-  parsing_result: Mapped["ParsingResultsModel"] = relationship(
+  # o2m
+  parsing_results: Mapped[list["ParsingResultsModel"]] = relationship(
     back_populates="user_search_link",
   )

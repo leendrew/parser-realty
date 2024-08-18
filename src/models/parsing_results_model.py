@@ -37,9 +37,9 @@ class ParsingResults(BaseModel):
     BigInteger,
     ForeignKey("users_search_links.id"),
   )
-  # o2o
+  # m2o
   user_search_link: Mapped["UsersSearchLinksModel"] = relationship(
-    back_populates="parsing_result",
+    back_populates="parsing_results",
   )
 
   city_metro_station_id: Mapped[int | None] = mapped_column(
