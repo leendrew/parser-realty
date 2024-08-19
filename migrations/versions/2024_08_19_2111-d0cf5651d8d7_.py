@@ -1,8 +1,8 @@
 """empty message
 
-Revision ID: 18ec185ecce4
+Revision ID: d0cf5651d8d7
 Revises: 
-Create Date: 2024-08-18 20:59:09.811564
+Create Date: 2024-08-19 21:11:24.758063
 
 """
 from typing import Sequence, Union
@@ -12,7 +12,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision: str = '18ec185ecce4'
+revision: str = 'd0cf5651d8d7'
 down_revision: Union[str, None] = None
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
@@ -45,16 +45,16 @@ def upgrade() -> None:
     sa.Column('id', sa.SmallInteger(), autoincrement=True, nullable=False),
     sa.Column('city_id', sa.SmallInteger(), nullable=False),
     sa.Column('metro_station_id', sa.SmallInteger(), nullable=False),
-    sa.ForeignKeyConstraint(['city_id'], ['cities.id'], name=op.f('fk_cities_metro_stations_city_id_cities')),
-    sa.ForeignKeyConstraint(['metro_station_id'], ['metro_stations.id'], name=op.f('fk_cities_metro_stations_metro_station_id_metro_stations')),
+    sa.ForeignKeyConstraint(['city_id'], ['cities.id'], name=op.f('fk_cities_metro_stations_city_id_cities'), ondelete='CASCADE'),
+    sa.ForeignKeyConstraint(['metro_station_id'], ['metro_stations.id'], name=op.f('fk_cities_metro_stations_metro_station_id_metro_stations'), ondelete='CASCADE'),
     sa.PrimaryKeyConstraint('id', name=op.f('pk_cities_metro_stations'))
     )
     op.create_table('users_search_links',
     sa.Column('id', sa.BigInteger(), autoincrement=True, nullable=False),
     sa.Column('user_id', sa.UUID(), nullable=False),
     sa.Column('search_link_id', sa.Integer(), nullable=False),
-    sa.ForeignKeyConstraint(['search_link_id'], ['search_links.id'], name=op.f('fk_users_search_links_search_link_id_search_links')),
-    sa.ForeignKeyConstraint(['user_id'], ['users.id'], name=op.f('fk_users_search_links_user_id_users')),
+    sa.ForeignKeyConstraint(['search_link_id'], ['search_links.id'], name=op.f('fk_users_search_links_search_link_id_search_links'), ondelete='CASCADE'),
+    sa.ForeignKeyConstraint(['user_id'], ['users.id'], name=op.f('fk_users_search_links_user_id_users'), ondelete='CASCADE'),
     sa.PrimaryKeyConstraint('id', name=op.f('pk_users_search_links'))
     )
     op.create_table('parsing_results',
@@ -72,7 +72,7 @@ def upgrade() -> None:
     sa.Column('commission_percent', sa.SmallInteger(), nullable=False),
     sa.Column('deposit_percent', sa.SmallInteger(), nullable=False),
     sa.ForeignKeyConstraint(['city_metro_station_id'], ['cities_metro_stations.id'], name=op.f('fk_parsing_results_city_metro_station_id_cities_metro_stations')),
-    sa.ForeignKeyConstraint(['user_search_link_id'], ['users_search_links.id'], name=op.f('fk_parsing_results_user_search_link_id_users_search_links')),
+    sa.ForeignKeyConstraint(['user_search_link_id'], ['users_search_links.id'], name=op.f('fk_parsing_results_user_search_link_id_users_search_links'), ondelete='CASCADE'),
     sa.PrimaryKeyConstraint('id', name=op.f('pk_parsing_results'))
     )
     # ### end Alembic commands ###
