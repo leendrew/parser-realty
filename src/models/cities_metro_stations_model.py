@@ -23,7 +23,10 @@ class CitiesMetroStations(BaseModel):
 
   city_id: Mapped[int] = mapped_column(
     SmallInteger,
-    ForeignKey("cities.id"),
+    ForeignKey(
+      "cities.id",
+      ondelete="CASCADE",
+    ),
   )
   # m2o
   city: Mapped["CitiesModel"] = relationship(
@@ -32,7 +35,10 @@ class CitiesMetroStations(BaseModel):
 
   metro_station_id: Mapped[int] = mapped_column(
     SmallInteger,
-    ForeignKey("metro_stations.id"),
+    ForeignKey(
+      "metro_stations.id",
+      ondelete="CASCADE",
+    ),
   )
   # m2o
   metro_station: Mapped["MetroStationsModel"] = relationship(

@@ -38,4 +38,5 @@ class SearchLinks(BaseModel):
   # o2m
   user_search_link: Mapped[list["UsersSearchLinksModel"]] = relationship(
     back_populates="search_link",
+    cascade="all, delete-orphan",
   )

@@ -26,7 +26,10 @@ class UsersSearchLinks(BaseModel):
 
   user_id: Mapped[UUID] = mapped_column(
     PSQL_UUID,
-    ForeignKey("users.id"),
+    ForeignKey(
+      "users.id",
+      ondelete="CASCADE",
+    ),
   )
   # m2o
   user: Mapped["UsersModel"] = relationship(
@@ -35,7 +38,10 @@ class UsersSearchLinks(BaseModel):
 
   search_link_id: Mapped[int] = mapped_column(
     Integer,
-    ForeignKey("search_links.id"),
+    ForeignKey(
+      "search_links.id",
+      ondelete="CASCADE",
+    ),
   )
   # m2o
   search_link: Mapped["SearchLinksModel"] = relationship(
@@ -45,4 +51,5 @@ class UsersSearchLinks(BaseModel):
   # o2m
   parsing_results: Mapped[list["ParsingResultsModel"]] = relationship(
     back_populates="user_search_link",
+    cascade="all, delete-orphan",
   )

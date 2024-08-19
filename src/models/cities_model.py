@@ -28,6 +28,7 @@ class Cities(BaseModel):
   metro_stations: Mapped[list["MetroStationsModel"]] = relationship(
     back_populates="cities",
     secondary="cities_metro_stations",
+    cascade="all, delete-orphan",
   )
 
   # o2m

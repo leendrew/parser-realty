@@ -35,11 +35,15 @@ class ParsingResults(BaseModel):
 
   user_search_link_id: Mapped[int] = mapped_column(
     BigInteger,
-    ForeignKey("users_search_links.id"),
+    ForeignKey(
+      "users_search_links.id",
+      ondelete="CASCADE",
+    ),
   )
   # m2o
   user_search_link: Mapped["UsersSearchLinksModel"] = relationship(
     back_populates="parsing_results",
+    cascade="all, delete-orphan",
   )
 
   city_metro_station_id: Mapped[int | None] = mapped_column(
