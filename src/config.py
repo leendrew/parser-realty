@@ -28,7 +28,6 @@ class DbConfig(BaseModel):
     "pk": "pk_%(table_name)s",
   }
 
-
 class Config(BaseSettings):
   model_config = SettingsConfigDict(
     env_file=".env",
