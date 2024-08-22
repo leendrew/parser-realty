@@ -13,11 +13,11 @@ from sqlalchemy import (
 )
 from .base_model import BaseModel
 if TYPE_CHECKING:
-  from . import UsersModel
-  from . import SearchLinksModel
-  from . import ParsingResultsModel
+  from . import ParsingResultModel
 
-class UsersSearchLinks(BaseModel):
+class UserSearchLinkModel(BaseModel):
+  __tablename__ = "users_search_links"
+
   id: Mapped[int] = mapped_column(
     BigInteger,
     primary_key=True,
@@ -31,10 +31,6 @@ class UsersSearchLinks(BaseModel):
       ondelete="CASCADE",
     ),
   )
-  # m2o
-  user: Mapped["UsersModel"] = relationship(
-    back_populates="user_search_links",
-  )
 
   search_link_id: Mapped[int] = mapped_column(
     Integer,
@@ -42,14 +38,11 @@ class UsersSearchLinks(BaseModel):
       "search_links.id",
       ondelete="CASCADE",
     ),
-  )
-  # m2o
-  search_link: Mapped["SearchLinksModel"] = relationship(
-    back_populates="user_search_links",
+    index=True,
   )
 
   # o2m
-  parsing_results: Mapped[list["ParsingResultsModel"]] = relationship(
+  parsing_results: Mapped[list["ParsingResultModel"]] = relationship(
     back_populates="user_search_link",
     cascade="all, delete-orphan",
   )

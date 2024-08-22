@@ -8,23 +8,18 @@ from sqlalchemy.orm import (
 from sqlalchemy import func
 from .base_model import BaseModel
 if TYPE_CHECKING:
-  from . import SearchLinksModel
-  from . import UsersSearchLinksModel
+  from . import SearchLinkModel
 
-class Users(BaseModel):
+class UserModel(BaseModel):
+  __tablename__ = "users"
+
   id: Mapped[UUID] = mapped_column(
     primary_key=True,
     server_default=func.gen_random_uuid(),
   )
 
   # m2m
-  search_links: Mapped[list["SearchLinksModel"]] = relationship(
+  search_links: Mapped[list["SearchLinkModel"]] = relationship(
     back_populates="users",
     secondary="users_search_links",
-    cascade="all, delete-orphan",
-  )
-
-  # o2m
-  user_search_links: Mapped[list["UsersSearchLinksModel"]] = relationship(
-    back_populates="user",
   )

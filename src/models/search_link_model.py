@@ -8,13 +8,14 @@ from sqlalchemy import (
   BigInteger,
   Text,
 )
-from src.api.search_links.search_links_types import SourceName
+from src.api.search_links.search_link_types import SourceName
 from .base_model import BaseModel
 if TYPE_CHECKING:
-  from . import UsersModel
-  from . import UsersSearchLinksModel
+  from . import UserModel
 
-class SearchLinks(BaseModel):
+class SearchLinkModel(BaseModel):
+  __tablename__ = "search_links"
+
   id: Mapped[int] = mapped_column(
     BigInteger,
     primary_key=True,
@@ -30,13 +31,7 @@ class SearchLinks(BaseModel):
   )
 
   # m2m
-  users: Mapped[list["UsersModel"]] = relationship(
+  users: Mapped[list["UserModel"]] = relationship(
     back_populates="search_links",
     secondary="users_search_links",
-  )
-
-  # o2m
-  user_search_link: Mapped[list["UsersSearchLinksModel"]] = relationship(
-    back_populates="search_link",
-    cascade="all, delete-orphan",
   )

@@ -10,10 +10,11 @@ from sqlalchemy import (
 )
 from .base_model import BaseModel
 if TYPE_CHECKING:
-  from . import CitiesModel
-  from . import CitiesMetroStationsModel
+  from . import MetroStationModel
 
-class MetroStations(BaseModel):
+class CityModel(BaseModel):
+  __tablename__ = "cities"
+
   id: Mapped[int] = mapped_column(
     SmallInteger,
     primary_key=True,
@@ -24,17 +25,8 @@ class MetroStations(BaseModel):
     Text,
   )
 
-  color: Mapped[str] = mapped_column(
-    Text,
-  )
-
   # m2m
-  cities: Mapped[list["CitiesModel"]] = relationship(
-    back_populates="metro_stations",
+  metro_stations: Mapped[list["MetroStationModel"]] = relationship(
+    back_populates="cities",
     secondary="cities_metro_stations",
-  )
-
-  # o2m
-  city_metro_stations: Mapped[list["CitiesMetroStationsModel"]] = relationship(
-    back_populates="metro_station",
   )

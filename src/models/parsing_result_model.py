@@ -15,13 +15,15 @@ from sqlalchemy import (
   Float,
   func,
 )
-from src.api.parsing_results.parsing_results_types import HousingType
+from src.api.parsing_results.parsing_result_types import HousingType
 from .base_model import BaseModel
 if TYPE_CHECKING:
-  from . import UsersSearchLinksModel
-  from . import CitiesMetroStationsModel
+  from . import UserSearchLinkModel
+  from . import CityMetroStationModel
 
-class ParsingResults(BaseModel):
+class ParsingResultModel(BaseModel):
+  __tablename__ = "parsing_results"
+
   id: Mapped[int] = mapped_column(
     BigInteger,
     primary_key=True,
@@ -41,9 +43,8 @@ class ParsingResults(BaseModel):
     ),
   )
   # m2o
-  user_search_link: Mapped["UsersSearchLinksModel"] = relationship(
+  user_search_link: Mapped["UserSearchLinkModel"] = relationship(
     back_populates="parsing_results",
-    cascade="all, delete-orphan",
   )
 
   city_metro_station_id: Mapped[int | None] = mapped_column(
@@ -52,7 +53,7 @@ class ParsingResults(BaseModel):
     nullable=True,
   )
   # o2o
-  city_metro_station: Mapped["CitiesMetroStationsModel"] = relationship(
+  city_metro_station: Mapped["CityMetroStationModel"] = relationship(
     back_populates="parsing_result",
   )
 
