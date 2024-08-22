@@ -1,4 +1,5 @@
 from fastapi import FastAPI
+from fastapi.responses import ORJSONResponse
 from contextlib import asynccontextmanager
 import uvicorn
 from .config import config
@@ -13,6 +14,7 @@ async def lifespan(app: FastAPI):
   await db_service.dispose()
 
 app = FastAPI(
+  default_response_class=ORJSONResponse,
   lifespan=lifespan,
 )
 
