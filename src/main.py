@@ -2,7 +2,7 @@ from fastapi import FastAPI
 from contextlib import asynccontextmanager
 import uvicorn
 from .config import config
-from .db_service import db_service
+from .shared import db_service
 from .api import api_router
 
 @asynccontextmanager
