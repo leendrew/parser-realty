@@ -10,7 +10,7 @@ from sqlalchemy import (
 )
 from .base_model import BaseModel
 if TYPE_CHECKING:
-  from . import MetroStationModel
+  from .metro_station_model import MetroStationModel
 
 class CityModel(BaseModel):
   __tablename__ = "cities"

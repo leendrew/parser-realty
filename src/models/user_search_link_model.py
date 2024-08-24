@@ -13,7 +13,7 @@ from sqlalchemy import (
 )
 from .base_model import BaseModel
 if TYPE_CHECKING:
-  from . import ParsingResultModel
+  from .parsing_result_model import ParsingResultModel
 
 class UserSearchLinkModel(BaseModel):
   __tablename__ = "users_search_links"
@@ -39,6 +39,7 @@ class UserSearchLinkModel(BaseModel):
       ondelete="CASCADE",
     ),
     index=True,
+    unique=True,
   )
 
   # o2m

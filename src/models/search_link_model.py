@@ -11,7 +11,7 @@ from sqlalchemy import (
 from src.api.search_links.search_link_types import SourceName
 from .base_model import BaseModel
 if TYPE_CHECKING:
-  from . import UserModel
+  from .user_model import UserModel
 
 class SearchLinkModel(BaseModel):
   __tablename__ = "search_links"

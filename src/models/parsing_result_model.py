@@ -13,13 +13,14 @@ from sqlalchemy import (
   String,
   DateTime,
   Float,
+  Index,
   func,
 )
 from src.api.parsing_results.parsing_result_types import HousingType
 from .base_model import BaseModel
 if TYPE_CHECKING:
-  from . import UserSearchLinkModel
-  from . import CityMetroStationModel
+  from .user_search_link_model import UserSearchLinkModel
+  from .city_metro_station_model import CityMetroStationModel
 
 class ParsingResultModel(BaseModel):
   __tablename__ = "parsing_results"
@@ -92,4 +93,8 @@ class ParsingResultModel(BaseModel):
 
   deposit_percent: Mapped[int] = mapped_column(
     SmallInteger,
+  )
+
+  __table_args__ = (
+    Index("ix_parsing_results_floor_flat_area", "floor", "flat_area"),
   )

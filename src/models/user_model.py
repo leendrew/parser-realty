@@ -8,7 +8,7 @@ from sqlalchemy.orm import (
 from sqlalchemy import func
 from .base_model import BaseModel
 if TYPE_CHECKING:
-  from . import SearchLinkModel
+  from .search_link_model import SearchLinkModel
 
 class UserModel(BaseModel):
   __tablename__ = "users"
