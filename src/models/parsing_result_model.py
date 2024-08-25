@@ -16,7 +16,6 @@ from sqlalchemy import (
   String,
   DateTime,
   Float,
-  Index,
   func,
 )
 from src.api.parsing_results.parsing_result_types import HousingType
