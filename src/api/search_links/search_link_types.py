@@ -4,4 +4,3 @@ class SourceName(Enum):
   avito = "avito"
   yandex = "yandex"
   cian = "cian"
-  domclick = "domclick"

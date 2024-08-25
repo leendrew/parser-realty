@@ -15,7 +15,6 @@ class LinkValidator:
       SourceName.avito: re.compile(pattern=rf"^{https_part_regex}www\.avito{domain_part_regex}"),
       SourceName.yandex: re.compile(rf"^{https_part_regex}\.realty\.ya{domain_part_regex}"),
       SourceName.cian: re.compile(rf"^{https_part_regex}{subdomain_part_regex}cian{domain_part_regex}"),
-      SourceName.domclick: re.compile(rf"^{https_part_regex}{subdomain_part_regex}domclick{domain_part_regex}"),
     }
     regex = regex_link_by_source[source]
 
