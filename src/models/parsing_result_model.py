@@ -85,10 +85,10 @@ class ParsingResultModel(BaseModel):
     BigInteger,
   )
 
-  commission_percent: Mapped[int] = mapped_column(
+  commission_percent: Mapped[int | None] = mapped_column(
     SmallInteger,
   )
 
-  deposit_percent: Mapped[int] = mapped_column(
+  deposit_percent: Mapped[int | None] = mapped_column(
     SmallInteger,
   )
