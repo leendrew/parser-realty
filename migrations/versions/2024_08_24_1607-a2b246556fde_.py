@@ -66,7 +66,7 @@ def upgrade() -> None:
     sa.Column('direct_link', sa.Text(), nullable=False),
     sa.Column('listed_at', sa.DateTime(timezone=True), nullable=False),
     sa.Column('housing_type', sa.Text(), nullable=False),
-    sa.Column('flat_room_type', sa.SmallInteger(), nullable=False, comment='0 - studio'),
+    sa.Column('flat_room_type', sa.SmallInteger(), nullable=False, comment='0 - студия'),
     sa.Column('floor', sa.String(length=5), nullable=False),
     sa.Column('flat_area', sa.Float(), nullable=False),
     sa.Column('price', sa.BigInteger(), nullable=False),

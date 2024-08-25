@@ -15,7 +15,6 @@ from sqlalchemy import (
   Text,
   String,
   DateTime,
-  Float,
   func,
 )
 from src.api.parsing_results.parsing_result_types import HousingType
@@ -78,8 +77,8 @@ class ParsingResultModel(BaseModel):
     String(5),
   )
 
-  flat_area: Mapped[float] = mapped_column(
-    Float,
+  flat_area: Mapped[str] = mapped_column(
+    String(7),
   )
 
   price: Mapped[int] = mapped_column(
