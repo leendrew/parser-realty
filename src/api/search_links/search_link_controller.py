@@ -4,6 +4,7 @@ from .search_link_dtos import (
   CreateOnePayloadDto,
   GetAllByQueryDtoDependency,
 )
+from ..users.user_service import UserServiceDependency
 
 router = APIRouter(
   prefix="/search-links",
@@ -12,9 +13,15 @@ router = APIRouter(
 @router.post("/")
 async def create_one(
   search_link_service: SearchLinkServiceDependency,
+  user_service: UserServiceDependency,
   payload: CreateOnePayloadDto,
 ):
-  result = await search_link_service.create_one_to_user(**payload.model_dump())
+  user = await user_service.get_one(user_id=payload.user_id)
+  result = await search_link_service.create_one_to_user(
+    link=payload.link,
+    source_name=payload.source_name,
+    user=user,
+  )
 
   return result
 

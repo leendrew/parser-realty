@@ -1,5 +1,4 @@
 from uuid import UUID
-import re
 from typing import (
   Annotated,
   Sequence,
@@ -20,7 +19,7 @@ class SearchLinkService(BaseService):
   async def create_one_to_user(self,
     link: str,
     source_name: SourceName,
-    user_id: UUID,
+    user: UserModel,
   ) -> SearchLinkModel:
     is_link_https = LinkValidator.is_valid_https(link)
     if not is_link_https:
@@ -42,18 +41,6 @@ class SearchLinkService(BaseService):
       raise HTTPException(
         status_code=400,
         detail="Ссылки данного сайта не поддерживаются",
-      )
-
-    stmt = select(UserModel).where(UserModel.id == user_id)
-    user = await self.session.scalar(stmt)
-
-    if not user:
-      # TODO: log user with id does not exist
-      print(f"Пользователь с id \"{user_id}\" отсутствует")
-
-      raise HTTPException(
-        status_code=400,
-        detail="Пользователь с таким id отсутствует",
       )
 
     model = SearchLinkModel(
