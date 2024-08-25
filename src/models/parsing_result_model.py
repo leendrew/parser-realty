@@ -1,4 +1,7 @@
-from typing import TYPE_CHECKING
+from typing import (
+  Optional,
+  TYPE_CHECKING,
+)
 from datetime import datetime
 from sqlalchemy.orm import (
   mapped_column,
@@ -54,16 +57,13 @@ class ParsingResultModel(BaseModel):
     nullable=True,
   )
   # o2o
-  city_metro_station: Mapped["CityMetroStationModel"] = relationship(
+  city_metro_station: Mapped[Optional["CityMetroStationModel"]] = relationship(
     back_populates="parsing_result",
   )
 
   direct_link: Mapped[str] = mapped_column(
     Text,
-  )
-
-  listed_at: Mapped[datetime] = mapped_column(
-    DateTime(timezone=True),
+    index=True,
   )
 
   housing_type: Mapped[HousingType] = mapped_column(
@@ -93,8 +93,4 @@ class ParsingResultModel(BaseModel):
 
   deposit_percent: Mapped[int] = mapped_column(
     SmallInteger,
-  )
-
-  __table_args__ = (
-    Index("ix_parsing_results_floor_flat_area", "floor", "flat_area"),
   )
