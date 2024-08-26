@@ -70,7 +70,7 @@ class ParsingResultModel(BaseModel):
 
   flat_room_type: Mapped[int] = mapped_column(
     SmallInteger,
-    comment="0 - студия",
+    comment="-1 - дом, 0 - студия",
   )
 
   floor: Mapped[str] = mapped_column(
