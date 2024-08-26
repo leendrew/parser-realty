@@ -11,6 +11,8 @@ from sqlalchemy import (
 from .base_model import BaseModel
 if TYPE_CHECKING:
   from .parsing_result_model import ParsingResultModel
+  from .city_model import CityModel
+  from .metro_station_model import MetroStationModel
 
 class CityMetroStationModel(BaseModel):
   __tablename__ = "cities_metro_stations"
@@ -28,6 +30,11 @@ class CityMetroStationModel(BaseModel):
       ondelete="CASCADE",
     ),
   )
+  # m2o
+  city: Mapped["CityModel"] = relationship(
+    back_populates="city_cities_metro_stations_associations",
+    viewonly=True,
+  )
 
   metro_station_id: Mapped[int] = mapped_column(
     SmallInteger,
@@ -35,6 +42,11 @@ class CityMetroStationModel(BaseModel):
       "metro_stations.id",
       ondelete="CASCADE",
     ),
+  )
+  # m2o
+  metro_station: Mapped["MetroStationModel"] = relationship(
+    back_populates="metro_station_cities_metro_stations_associations",
+    viewonly=True,
   )
 
   # o2o

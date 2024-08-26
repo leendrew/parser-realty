@@ -13,6 +13,7 @@ from src.api.search_links.search_link_types import SourceName
 from .base_model import BaseModel
 if TYPE_CHECKING:
   from .user_model import UserModel
+  from .user_search_link_model import UserSearchLinkModel
 
 class SearchLinkModel(BaseModel):
   __tablename__ = "search_links"
@@ -40,4 +41,9 @@ class SearchLinkModel(BaseModel):
   users: Mapped[list["UserModel"]] = relationship(
     back_populates="search_links",
     secondary="users_search_links",
+  )
+  # o2m
+  search_link_users_search_links_associations: Mapped[list["UserSearchLinkModel"]] = relationship(
+    back_populates="search_link",
+    viewonly=True,
   )

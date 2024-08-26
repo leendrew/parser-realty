@@ -11,6 +11,7 @@ from sqlalchemy import (
 from .base_model import BaseModel
 if TYPE_CHECKING:
   from .city_model import CityModel
+  from .city_metro_station_model import CityMetroStationModel
 
 class MetroStationModel(BaseModel):
   __tablename__ = "metro_stations"
@@ -33,4 +34,9 @@ class MetroStationModel(BaseModel):
   cities: Mapped[list["CityModel"]] = relationship(
     back_populates="metro_stations",
     secondary="cities_metro_stations",
+  )
+  # o2m
+  metro_station_cities_metro_stations_associations: Mapped[list["CityMetroStationModel"]] = relationship(
+    back_populates="metro_station",
+    viewonly=True,
   )

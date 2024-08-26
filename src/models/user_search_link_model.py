@@ -14,6 +14,8 @@ from sqlalchemy import (
 from .base_model import BaseModel
 if TYPE_CHECKING:
   from .parsing_result_model import ParsingResultModel
+  from .user_model import UserModel
+  from .search_link_model import SearchLinkModel
 
 class UserSearchLinkModel(BaseModel):
   __tablename__ = "users_search_links"
@@ -31,6 +33,11 @@ class UserSearchLinkModel(BaseModel):
       ondelete="CASCADE",
     ),
   )
+  # m2o
+  user: Mapped["UserModel"] = relationship(
+    back_populates="user_users_search_links_associations",
+    viewonly=True,
+  )
 
   search_link_id: Mapped[int] = mapped_column(
     Integer,
@@ -40,6 +47,11 @@ class UserSearchLinkModel(BaseModel):
     ),
     index=True,
     unique=True,
+  )
+  # m2o
+  search_link: Mapped["SearchLinkModel"] = relationship(
+    back_populates="search_link_users_search_links_associations",
+    viewonly=True,
   )
 
   # o2m

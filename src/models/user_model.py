@@ -9,6 +9,7 @@ from sqlalchemy import func
 from .base_model import BaseModel
 if TYPE_CHECKING:
   from .search_link_model import SearchLinkModel
+  from .user_search_link_model import UserSearchLinkModel
 
 class UserModel(BaseModel):
   __tablename__ = "users"
@@ -22,4 +23,9 @@ class UserModel(BaseModel):
   search_links: Mapped[list["SearchLinkModel"]] = relationship(
     back_populates="users",
     secondary="users_search_links",
+  )
+  # o2m
+  user_users_search_links_associations: Mapped[list["UserSearchLinkModel"]] = relationship(
+    back_populates="user",
+    viewonly=True,
   )
