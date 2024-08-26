@@ -24,7 +24,7 @@ class CreateOnePayloadDto(BaseModel):
 
     is_valid_source_link = LinkValidator.is_valid_source(
       source=self.source_name,
-      link=self.link
+      link=self.link,
     )
     if not is_valid_source_link:
       raise ValueError("Ссылки данного сайта не поддерживаются")
@@ -34,6 +34,7 @@ class CreateOnePayloadDto(BaseModel):
 class GetAllByQueryDto(BaseModel):
   id: Annotated[int | None, Query(default=None)] = None
   source_name: Annotated[SourceName | None, Query()] = None
+  is_active: Annotated[bool | None, Query()] = None
   user_id: Annotated[UUID | None, Query()] = None
 
 GetAllByQueryDtoDependency = Annotated[GetAllByQueryDto, Depends()]

@@ -16,7 +16,8 @@ from src.models.user_model import UserModel
 from .search_link_types import SourceName
 
 class SearchLinkService(BaseService):
-  async def create_one_to_user(self,
+  async def create_one_to_user(
+    self,
     link: str,
     source_name: SourceName,
     user: UserModel,
@@ -32,7 +33,10 @@ class SearchLinkService(BaseService):
         detail="Невалидный протокол",
       )
 
-    is_valid_source_link = LinkValidator.is_valid_source(source=source_name, link=link)
+    is_valid_source_link = LinkValidator.is_valid_source(
+      source=source_name,
+      link=link
+    )
     if not is_valid_source_link:
       # TODO: log link not support
       print(f"Ссылки с ресурса \"{source_name}\" не поддерживаются")
@@ -70,20 +74,25 @@ class SearchLinkService(BaseService):
 
   async def get_all_by(
     self,
-    id: int | None,
-    source_name: SourceName | None,
-    user_id: UUID | None,
+    id: int | None = None,
+    source_name: SourceName | None = None,
+    is_active: bool | None = None,
+    user_id: UUID | None = None,
   ) -> Sequence[SearchLinkModel]:
-    stmt = select(SearchLinkModel).join(SearchLinkModel.users)
+    stmt = (
+      select(SearchLinkModel)
+      .join(SearchLinkModel.users)
+    )
 
     filters = []
-
     if id is not None:
       filters.append(SearchLinkModel.id == id)
     if source_name is not None:
       filters.append(SearchLinkModel.source_name == source_name.value)
+    if is_active is not None:
+      filters.append(SearchLinkModel.is_active == is_active)
     if user_id is not None:
-      filters(UserModel.id == user_id)
+      filters.append(UserModel.id == user_id)
 
     if filters:
       stmt = stmt.filter(*filters)

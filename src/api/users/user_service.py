@@ -18,8 +18,14 @@ class UserService(BaseService):
 
     return users.all()
 
-  async def get_one(self, user_id: UUID) -> UserModel:
-    stmt = select(UserModel).where(UserModel.id == user_id)
+  async def get_one(
+    self,
+    user_id: UUID,
+  ) -> UserModel:
+    stmt = (
+      select(UserModel)
+      .where(UserModel.id == user_id)
+    )
     user = await self.session.scalar(stmt)
     if not user:
       # TODO: log user with id does not exist
