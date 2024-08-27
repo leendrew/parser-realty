@@ -66,7 +66,7 @@ class SearchLinkService(BaseService):
 
     except Exception as e:
       # TODO: log corrupt save search link
-      print(f"Ошибка при сохранении ссылки \"{link}\" в базу для пользователя с id \"{user.id}\". Ошибка: {e}")
+      print(f"Ошибка при сохранении ссылки \"{link}\" для пользователя с id \"{user.id}\". Ошибка: {e}")
 
       await self.session.rollback()
 
