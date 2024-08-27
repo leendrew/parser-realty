@@ -38,3 +38,6 @@ class GetAllByQueryDto(BaseModel):
   user_id: Annotated[UUID | None, Query()] = None
 
 GetAllByQueryDtoDependency = Annotated[GetAllByQueryDto, Depends()]
+
+class EditOnePayloadDto(BaseModel):
+  is_active: bool

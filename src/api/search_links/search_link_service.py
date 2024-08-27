@@ -7,7 +7,11 @@ from fastapi import (
   HTTPException,
   Depends,
 )
-from sqlalchemy import select
+from sqlalchemy import (
+  select,
+  update,
+  delete,
+)
 from src.shared import BaseService
 from src.utils import LinkValidator
 # ! MIGRATION: comment below before migration
@@ -100,5 +104,34 @@ class SearchLinkService(BaseService):
     links = await self.session.scalars(stmt)
 
     return links.all()
+
+  async def edit_one(
+    self,
+    id: int,
+    is_active: bool,
+  ) -> SearchLinkModel:
+    stmt = (
+      update(SearchLinkModel)
+      .where(SearchLinkModel.id == id)
+      .values(is_active=is_active)
+      .returning(SearchLinkModel)
+    )
+
+    try:
+      model = await self.session.scalar(stmt)
+
+      return model
+
+    except Exception as e:
+      # TODO: corrupt update link
+      print(f"Не могу обновить ссылку с id \"{id}\". Ошибка: {e}")
+
+      await self.session.rollback()
+
+      # TODO: correct status code
+      raise HTTPException(
+        status_code=400,
+        detail="Ошибка при обновлении ссылки",
+      )
 
 SearchLinkServiceDependency = Annotated[SearchLinkService, Depends()]

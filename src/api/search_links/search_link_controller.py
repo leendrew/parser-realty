@@ -33,3 +33,17 @@ async def get_all(
   result = await search_link_service.get_all_by(**query.model_dump())
 
   return result
+
+@router.patch("/{id}")
+async def edit_one(
+  search_link_service: SearchLinkServiceDependency,
+  id: int,
+  payload: EditOnePayloadDto,
+):
+  result = await search_link_service.edit_one(
+    id=id,
+    is_active=payload.is_active,
+  )
+
+  return result
+
