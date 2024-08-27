@@ -134,4 +134,31 @@ class SearchLinkService(BaseService):
         detail="Ошибка при обновлении ссылки",
       )
 
+  async def delete_one(
+    self,
+    id: int,
+  ) -> SearchLinkModel:
+    stmt = (
+      delete(SearchLinkModel)
+      .where(SearchLinkModel.id == id)
+      .returning(SearchLinkModel)
+    )
+
+    try:
+      model = await self.session.scalar(stmt)
+
+      return model
+
+    except Exception as e:
+      # TODO: corrupt delete link
+      print(f"Ошибка при удалении ссылки с id \"{id}\". Ошибка: {e}")
+
+      await self.session.rollback()
+
+      # TODO: correct status code
+      raise HTTPException(
+        status_code=400,
+        detail="Ошибка при удалении ссылки",
+      )
+
 SearchLinkServiceDependency = Annotated[SearchLinkService, Depends()]

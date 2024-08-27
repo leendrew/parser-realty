@@ -3,6 +3,7 @@ from .search_link_service import SearchLinkServiceDependency
 from .search_link_dtos import (
   CreateOnePayloadDto,
   GetAllByQueryDtoDependency,
+  EditOnePayloadDto,
 )
 from ..users.user_service import UserServiceDependency
 
@@ -47,3 +48,11 @@ async def edit_one(
 
   return result
 
+@router.delete("/{id}")
+async def delete_one(
+  search_link_service: SearchLinkServiceDependency,
+  id: int,
+):
+  result = await search_link_service.delete_one(id=id)
+
+  return result
