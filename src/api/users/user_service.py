@@ -26,11 +26,13 @@ class UserService(BaseService):
       select(UserModel)
       .where(UserModel.id == user_id)
     )
+
     user = await self.session.scalar(stmt)
     if not user:
       # TODO: log user with id does not exist
       print(f"Пользователь с id \"{id}\" отсутствует")
 
+      # TODO: correct status code
       raise HTTPException(
         status_code=400,
         detail="Пользователь с таким id отсутствует",
