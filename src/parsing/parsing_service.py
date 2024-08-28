@@ -81,41 +81,50 @@ class ParsingService:
         item_title = item_link.find(attrs={"itemprop": "name"})
         title_content = item_title.text.lower()
 
-        # TODO: support Дом 50 м² на участке 2 сот.
-        title_match = re.search(pattern=title_regex, string=title_content)
+        title_match = re.search(pattern=title_flat_regex, string=title_content)
+        if not title_match:
+          title_match = re.search(pattern=title_house_regex, string=title_content)
         type, flat_area, floor = title_match.groups()
+        if not floor:
+          floor = "1"
 
-        housing_type_match = re.search(pattern=housing_type_regex, string=type)
-        flat = housing_type_match.group(1)
-        room = housing_type_match.group(2)
         housing_type = HousingType.house
-        if flat:
-          housing_type = HousingType.flat
-        if room:
-          housing_type = HousingType.room
+        housing_type_match = re.search(pattern=housing_type_regex, string=type)
+        if housing_type_match:
+          flat = housing_type_match.group(1)
+          room = housing_type_match.group(2)
+          if flat:
+            housing_type = HousingType.flat
+          if room:
+            housing_type = HousingType.room
 
         flat_room_type_match = re.search(pattern=flat_room_type_regex, string=type)
         flat_room_type = flat_room_type_match and flat_room_type_match.group(1)
         flat_room_type = flat_room_type and int(flat_room_type) or 0
+        if housing_type is HousingType.house:
+          flat_room_type = -1
 
         item_price = item_body.find(attrs={"itemprop": "price"})
         price = int(item_price.get("content"))
 
+        deposit_percent = None
+        commission_percent = None
         item_params = item_body.find(attrs={"data-marker": "item-specific-params"})
-        item_params_text = item_params.text
-        arr = item_params_text.split("·")
-        deposit_raw = arr[0]
-        commission_raw = arr[1]
-        
-        deposit_matches = re.findall(pattern=deposit_regex, string=deposit_raw)
-        deposit = int("".join(deposit_matches))
-        deposit_percent = 0
-        if deposit:
-          deposit_percent = int(deposit / price * 100)
+        if item_params:
+          item_params_text = item_params.text
+          arr = item_params_text.split("·")
+          deposit_raw = arr[0]
+          commission_raw = arr[1]
+          
+          deposit_matches = re.findall(pattern=deposit_regex, string=deposit_raw)
+          deposit = int("".join(deposit_matches))
+          deposit_percent = 0
+          if deposit:
+            deposit_percent = int(deposit / price * 100)
 
-        commission_match = re.search(pattern=commission_percent_regex, string=commission_raw)
-        commission = commission_match and commission_match.group(1)
-        commission_percent = commission and int(commission) or 0
+          commission_match = re.search(pattern=commission_percent_regex, string=commission_raw)
+          commission = commission_match and commission_match.group(1)
+          commission_percent = commission and int(commission) or 0
 
         metro_station_name = None
         item_metro_station_root_container = item_body.find(class_=item_metro_station_root_container_regex)
@@ -126,7 +135,8 @@ class ParsingService:
             metro_station_name = specific_geo_map[item_metro_station_name]
           else:
             item_metro_station_name = item_metro_station_root_container.find(class_=item_metro_station_icon_regex)
-            metro_station_name = item_metro_station_name.next_sibling.text.strip()
+            if item_metro_station_name:
+              metro_station_name = item_metro_station_name.next_sibling.text.strip()
 
         parsing_result = ParsingResult(
           direct_link=direct_link,
@@ -153,7 +163,7 @@ class ParsingService:
     soup = self.parser.with_lxml(markup=markup)
     body = soup.find(name="body")
 
-    housing_type_regex = re.compile(r"(?:(\d+)?-комн)?(студия)?(комнат)?", re.MULTILINE | re.IGNORECASE)
+    housing_type_regex = re.compile(r"(?:(\d+)?-комн)?(студ)?(комнат)?", re.MULTILINE | re.IGNORECASE)
     flat_area_regex = re.compile(r"(\d+)")
     floor_regex = re.compile(r"\d+")
     price_regex = re.compile(r"\d+")
@@ -177,31 +187,38 @@ class ParsingService:
         direct_link = "https://realty.ya.ru" + item_link.get("href")
 
         title_text = item_link.text.strip()
+        flat_area_raw = ""
+        housing_type_raw = ""
+        floor_raw = "1"
         arr = title_text.split("·")
         flat_area_raw = arr[0]
-        housing_type_raw = arr[1]
-        floor_raw = arr[2]
+        if len(arr) > 1:
+          housing_type_raw = arr[1].strip()
+          floor_raw = arr[2]
 
         flat_area_match = re.search(pattern=flat_area_regex, string=flat_area_raw)
         flat_area = flat_area_match.group(1)
 
-        # TODO: пофиксить
         flat_room_type = 0
         housing_type = HousingType.house
-        housing_type_match = re.search(pattern=housing_type_regex, string=housing_type_raw)
-        flat = housing_type_match.group(1)
-        studio = housing_type_match.group(2)
-        room = housing_type_match.group(3)
-        if flat:
-          flat_room_type = int(flat)
-          housing_type = HousingType.flat
-        if studio:
-          housing_type = HousingType.flat
-        if room:
-          housing_type = HousingType.room
+        housing_type_match = re.match(pattern=housing_type_regex, string=housing_type_raw)
+        if housing_type_match:
+          flat = housing_type_match.group(1)
+          studio = housing_type_match.group(2)
+          room = housing_type_match.group(3)
+          if flat:
+            flat_room_type = int(flat)
+            housing_type = HousingType.flat
+          if studio:
+            housing_type = HousingType.flat
+          if room:
+            housing_type = HousingType.room
+        if housing_type is HousingType.house:
+          flat_room_type = -1
 
         floor_matches = re.findall(pattern=floor_regex, string=floor_raw)
-        floor = "/".join(floor_matches)
+        if floor_matches:
+          floor = "/".join(floor_matches)
 
         item_price = item.find(class_="Price")
         price_raw = item_price.text
