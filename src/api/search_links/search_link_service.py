@@ -12,12 +12,17 @@ from sqlalchemy import (
   update,
   delete,
 )
-from src.shared import BaseService
+from src.shared import (
+  BaseService,
+  Logger,
+)
 from src.utils import LinkValidator
 # ! MIGRATION: comment below before migration
 from src.models.search_link_model import SearchLinkModel
 from src.models.user_model import UserModel
 from .search_link_types import SourceName
+
+logger = Logger().get_instance()
 
 class SearchLinkService(BaseService):
   async def create_one_to_user(
@@ -28,8 +33,7 @@ class SearchLinkService(BaseService):
   ) -> SearchLinkModel:
     is_link_https = LinkValidator.is_valid_https(link)
     if not is_link_https:
-      # TODO: log uncorrect protocol
-      print(f"Ссылка \"{link}\" имеет невалидный протокол")
+      logger.error(f"Ссылка \"{link}\" имеет невалидный протокол")
 
       # TODO: correct status code
       raise HTTPException(
@@ -42,8 +46,7 @@ class SearchLinkService(BaseService):
       link=link
     )
     if not is_valid_source_link:
-      # TODO: log link not support
-      print(f"Ссылки с ресурса \"{source_name}\" не поддерживаются")
+      logger.error(f"Ссылки с ресурса \"{source_name}\" не поддерживаются")
 
       # TODO: correct status code
       raise HTTPException(
@@ -65,8 +68,7 @@ class SearchLinkService(BaseService):
       return model
 
     except Exception as e:
-      # TODO: log corrupt save search link
-      print(f"Ошибка при сохранении ссылки \"{link}\" для пользователя с id \"{user.id}\". Ошибка: {e}")
+      logger.exception(f"Ошибка при сохранении ссылки \"{link}\" для пользователя с id \"{user.id}\". Ошибка: {e}")
 
       await self.session.rollback()
 
@@ -123,8 +125,7 @@ class SearchLinkService(BaseService):
       return model
 
     except Exception as e:
-      # TODO: corrupt update link
-      print(f"Не могу обновить ссылку с id \"{id}\". Ошибка: {e}")
+      logger.exception(f"Ошибка при обновлении ссылки с id \"{id}\". Ошибка: {e}")
 
       await self.session.rollback()
 
@@ -150,8 +151,7 @@ class SearchLinkService(BaseService):
       return model
 
     except Exception as e:
-      # TODO: corrupt delete link
-      print(f"Ошибка при удалении ссылки с id \"{id}\". Ошибка: {e}")
+      logger.exception(f"Ошибка при удалении ссылки с id \"{id}\". Ошибка: {e}")
 
       await self.session.rollback()
 

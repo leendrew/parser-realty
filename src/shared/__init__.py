@@ -3,3 +3,4 @@ from .db_service import (
   SessionDependency,
 )
 from .base_service import BaseService
+from .logger import Logger

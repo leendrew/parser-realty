@@ -8,8 +8,13 @@ from fastapi import (
   HTTPException,
 )
 from sqlalchemy import select
-from src.shared import BaseService
+from src.shared import (
+  BaseService,
+  Logger,
+)
 from src.models.user_model import UserModel
+
+logger = Logger().get_instance()
 
 class UserService(BaseService):
   async def get_all(self) -> Sequence[UserModel]:
@@ -29,13 +34,12 @@ class UserService(BaseService):
 
     user = await self.session.scalar(stmt)
     if not user:
-      # TODO: log user with id does not exist
-      print(f"Пользователь с id \"{id}\" отсутствует")
+      logger.error(f"Пользователь с id \"{id}\" отсутствует")
 
       # TODO: correct status code
       raise HTTPException(
         status_code=400,
-        detail="Пользователь с таким id отсутствует",
+        detail="Пользователь не найден",
       )
 
     return user

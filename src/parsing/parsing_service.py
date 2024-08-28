@@ -1,23 +1,30 @@
 from typing import Annotated
 import re
 from fastapi import Depends
-from .parser import Parser
-from .fetcher import Fetcher
-from src.api.parsing_results.parsing_result_types import ParsingResult
-from src.api.search_links.search_link_types import SourceName
-from src.api.parsing_results.parsing_result_types import HousingType
 from bs4 import (
   ResultSet,
   Tag,
   NavigableString,
 )
+from .parser import Parser
+from .fetcher import Fetcher
+from src.shared import Logger
+from src.api.parsing_results.parsing_result_types import ParsingResult
+from src.api.search_links.search_link_types import SourceName
+from src.api.parsing_results.parsing_result_types import HousingType
+
+logger = Logger().get_instance()
 
 class ParsingService:
   def __init__(self) -> None:
     self.fetcher = Fetcher()
     self.parser = Parser()
 
-  def parse(self, source: SourceName, link: str) -> list[ParsingResult]:
+  def parse(
+    self,
+    source: SourceName,
+    link: str,
+  ) -> list[ParsingResult]:
     method_by_source = {
       SourceName.avito: self.parse_avito,
       SourceName.yandex: self.parse_yandex,
@@ -26,8 +33,7 @@ class ParsingService:
 
     method = method_by_source[source]
     if not method:
-      # TODO: log
-      print(f"Для источника \"{source}\" не нашлось парсера")
+      logger.error(f"Для источника \"{source}\" не нашлось парсера")
 
       raise Exception(f"Для источника \"{source}\" не нашлось парсера")
 
@@ -36,12 +42,16 @@ class ParsingService:
 
     return method(markup=bytes_response)
 
-  def parse_avito(self, markup: str | bytes) -> list[ParsingResult]:
+  def parse_avito(
+    self,
+    markup: str | bytes,
+  ) -> list[ParsingResult]:
     soup = self.parser.with_lxml(markup=markup)
     body = soup.find(name="body")
 
     item_body_regex = re.compile(r"item-body")
-    title_regex = re.compile(r"([^,]+),\s*(\d+(?:[.,]\d+)?).*,\s*([0-9/]+)")
+    title_flat_regex = re.compile(r"([^,]+),\s*(\d+(?:[.,]\d+)?).*,\s*([0-9/]+)")
+    title_house_regex = re.compile(r"()(\d+).+м²()")
     housing_type_regex = re.compile(r"(квартира)?(комната)?", re.MULTILINE)
     flat_room_type_regex = re.compile(r"(\d+)")
     deposit_regex = re.compile(r"\d+")
@@ -54,10 +64,9 @@ class ParsingService:
 
     container = body.find(attrs={"data-marker": "catalog-serp"})
     if not container:
-      # TODO: log
-      print(f"Не нашел контейнер при парсинге источника \"{SourceName.avito}\"")
+      logger.error(f"Не нашел контейнер при парсинге источника \"{SourceName.avito}\"")
 
-      raise Exception(f"Не нашел контейнер при парсинге источника \"{SourceName.avito}\"")
+      raise Exception(f"Ошибка при парсинге источника \"{SourceName.avito}\"")
 
     result: list[ParsingResult] = []
 
@@ -133,12 +142,14 @@ class ParsingService:
         result.append(parsing_result)
 
       except Exception as e:
-        # TODO: log something went wrong
-        print(f"При парсинге источника \"{SourceName.avito}\" что-то пошло не так. Ошибка: {e}")
+        logger.exception(f"При парсинге источника \"{SourceName.avito}\". Ошибка: {e}")
 
     return result
 
-  def parse_yandex(self, markup: str | bytes) -> list[ParsingResult]:
+  def parse_yandex(
+    self,
+    markup: str | bytes,
+  ) -> list[ParsingResult]:
     soup = self.parser.with_lxml(markup=markup)
     body = soup.find(name="body")
 
@@ -153,10 +164,9 @@ class ParsingService:
 
     container = body.find(class_="OffersSerp__list")
     if not container:
-      # TODO: log
-      print(f"Не нашел контейнер при парсинге источника \"{SourceName.yandex}\"")
+      logger.error(f"Не нашел контейнер при парсинге источника \"{SourceName.yandex}\"")
 
-      raise Exception(f"Не нашел контейнер при парсинге источника \"{SourceName.yandex}\"")
+      raise Exception(f"Ошибка при парсинге источника \"{SourceName.yandex}\"")
     
     result: list[ParsingResult] = []
 
@@ -231,12 +241,14 @@ class ParsingService:
         result.append(parsing_result)
 
       except Exception as e:
-        # TODO: log something went wrong
-        print(f"При парсинге источника \"{SourceName.yandex}\" что-то пошло не так. Ошибка: {e}")
+        logger.exception(f"При парсинге источника \"{SourceName.yandex}\" что-то пошло не так. Ошибка: {e}")
 
     return result
 
-  def parse_cian(self, markup: str | bytes) -> list[ParsingResult]:
+  def parse_cian(
+    self,
+    markup: str | bytes,
+  ) -> list[ParsingResult]:
     soup = self.parser.with_lxml(markup=markup)
     body = soup.find(name="body")
 
@@ -250,10 +262,9 @@ class ParsingService:
 
     container = body.find(class_=container_regex)
     if not container:
-      # TODO: log
-      print(f"Не нашел контейнер при парсинге источника \"{SourceName.cian}\"")
+      logger.error(f"Не нашел контейнер при парсинге источника \"{SourceName.cian}\"")
 
-      raise Exception(f"Не нашел контейнер при парсинге источника \"{SourceName.cian}\"")
+      raise Exception(f"Ошибка при парсинге источника \"{SourceName.cian}\"")
 
     result: list[ParsingResult] = []
 
@@ -319,8 +330,7 @@ class ParsingService:
         result.append(parsing_result)
 
       except Exception as e:
-        # TODO: log something went wrong
-        print(f"При парсинге источника \"{SourceName.cian}\" что-то пошло не так. Ошибка: {e}")
+        logger.exception(f"При парсинге источника \"{SourceName.cian}\" что-то пошло не так. Ошибка: {e}")
 
     return result
 
