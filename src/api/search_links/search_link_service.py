@@ -67,8 +67,8 @@ class SearchLinkService(BaseService):
 
       return model
 
-    except Exception as e:
-      logger.exception(f"Ошибка при сохранении ссылки \"{link}\" для пользователя с id \"{user.id}\". Ошибка: {e}")
+    except Exception:
+      logger.exception(f"Ошибка при сохранении ссылки \"{link}\" для пользователя с id \"{user.id}\"")
 
       await self.session.rollback()
 
@@ -124,8 +124,8 @@ class SearchLinkService(BaseService):
 
       return model
 
-    except Exception as e:
-      logger.exception(f"Ошибка при обновлении ссылки с id \"{id}\". Ошибка: {e}")
+    except Exception:
+      logger.exception(f"Ошибка при обновлении ссылки с id \"{id}\"")
 
       await self.session.rollback()
 
@@ -150,8 +150,8 @@ class SearchLinkService(BaseService):
 
       return model
 
-    except Exception as e:
-      logger.exception(f"Ошибка при удалении ссылки с id \"{id}\". Ошибка: {e}")
+    except Exception:
+      logger.exception(f"Ошибка при удалении ссылки с id \"{id}\"")
 
       await self.session.rollback()
 

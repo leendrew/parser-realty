@@ -151,8 +151,8 @@ class ParsingService:
         )
         result.append(parsing_result)
 
-      except Exception as e:
-        logger.exception(f"При парсинге источника \"{SourceName.avito}\". Ошибка: {e}")
+      except Exception:
+        logger.exception(f"При парсинге источника \"{SourceName.avito}\"")
 
     return result
 
@@ -257,8 +257,8 @@ class ParsingService:
         )
         result.append(parsing_result)
 
-      except Exception as e:
-        logger.exception(f"При парсинге источника \"{SourceName.yandex}\" что-то пошло не так. Ошибка: {e}")
+      except Exception:
+        logger.exception(f"При парсинге источника \"{SourceName.yandex}\" что-то пошло не так")
 
     return result
 
@@ -346,8 +346,8 @@ class ParsingService:
         )
         result.append(parsing_result)
 
-      except Exception as e:
-        logger.exception(f"При парсинге источника \"{SourceName.cian}\" что-то пошло не так. Ошибка: {e}")
+      except Exception:
+        logger.exception(f"При парсинге источника \"{SourceName.cian}\" что-то пошло не так")
 
     return result
 
