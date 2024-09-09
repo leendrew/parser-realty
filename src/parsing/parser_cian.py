@@ -32,9 +32,9 @@ class ParserCian(ParserBase):
 
     container = body.find(class_=container_regex)
     if not container:
-      logger.error(f"Не нашел контейнер при парсинге источника \"{SourceName.cian}\"")
-
-      raise Exception(f"Не нашел контейнер при парсинге источника \"{SourceName.cian}\"")
+      message = f"Не нашел контейнер при парсинге источника \"{SourceName.cian}\""
+      logger.error(message)
+      raise Exception(message)
 
     result: list[ParsingResult] = []
 

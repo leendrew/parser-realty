@@ -20,6 +20,10 @@ class ParsingService:
     self.parser_yandex = ParserYandex()
     self.parser_cian = ParserCian()
 
+  # диспатчер, который сортирует распределяет по источнику по очередям и выполняет их в разных тредах
+  def dispatcher(self):
+    pass
+
   async def parse(
     self,
     source: SourceName,

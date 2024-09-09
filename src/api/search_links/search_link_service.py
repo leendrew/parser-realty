@@ -34,7 +34,6 @@ class SearchLinkService(BaseService):
     is_link_https = LinkValidator.is_valid_https(link)
     if not is_link_https:
       logger.error(f"Ссылка \"{link}\" имеет невалидный протокол")
-
       # TODO: correct status code
       raise HTTPException(
         status_code=400,
@@ -47,7 +46,6 @@ class SearchLinkService(BaseService):
     )
     if not is_valid_source_link:
       logger.error(f"Ссылки с ресурса \"{source_name}\" не поддерживаются")
-
       # TODO: correct status code
       raise HTTPException(
         status_code=400,
@@ -68,10 +66,9 @@ class SearchLinkService(BaseService):
       return model
 
     except Exception:
-      logger.exception(f"Ошибка при сохранении ссылки \"{link}\" для пользователя с id \"{user.id}\"")
-
       await self.session.rollback()
 
+      logger.exception(f"Ошибка при сохранении ссылки \"{link}\" для пользователя с id \"{user.id}\"")
       # TODO: correct status code
       raise HTTPException(
         status_code=400,
@@ -125,10 +122,9 @@ class SearchLinkService(BaseService):
       return model
 
     except Exception:
-      logger.exception(f"Ошибка при обновлении ссылки с id \"{id}\"")
-
       await self.session.rollback()
 
+      logger.exception(f"Ошибка при обновлении ссылки с id \"{id}\"")
       # TODO: correct status code
       raise HTTPException(
         status_code=400,
@@ -151,10 +147,9 @@ class SearchLinkService(BaseService):
       return model
 
     except Exception:
-      logger.exception(f"Ошибка при удалении ссылки с id \"{id}\"")
-
       await self.session.rollback()
 
+      logger.exception(f"Ошибка при удалении ссылки с id \"{id}\"")
       # TODO: correct status code
       raise HTTPException(
         status_code=400,

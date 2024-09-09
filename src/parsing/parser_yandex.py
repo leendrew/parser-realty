@@ -33,9 +33,9 @@ class ParserYandex(ParserBase):
 
     container = body.find(class_="OffersSerp__list")
     if not container:
-      logger.error(f"Не нашел контейнер при парсинге источника \"{SourceName.yandex}\"")
-
-      raise Exception(f"Не нашел контейнер при парсинге источника \"{SourceName.yandex}\"")
+      message = f"Не нашел контейнер при парсинге источника \"{SourceName.yandex}\""
+      logger.error(message)
+      raise Exception(message)
     
     result: list[ParsingResult] = []
 

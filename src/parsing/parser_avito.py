@@ -38,9 +38,9 @@ class ParserAvito(ParserBase):
 
     container = body.find(attrs={"data-marker": "catalog-serp"})
     if not container:
-      logger.error(f"Не нашел контейнер при парсинге источника \"{SourceName.avito}\"")
-
-      raise Exception(f"Не нашел контейнер при парсинге источника \"{SourceName.avito}\"")
+      message = f"Не нашел контейнер при парсинге источника \"{SourceName.avito}\""
+      logger.error(message)
+      raise Exception(message)
 
     result: list[ParsingResult] = []
 
