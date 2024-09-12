@@ -41,7 +41,7 @@ class ParsingService:
       logger.error(message)
       raise Exception(message)
 
-    fetch_response = self.fetcher.get_with_retry(url=link)
+    fetch_response = await self.fetcher.get_with_retry(url=link)
     bytes_response = fetch_response.content
 
     result = await method(markup=bytes_response)

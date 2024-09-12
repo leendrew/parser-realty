@@ -1,5 +1,5 @@
 from typing import Callable
-from time import sleep
+from asyncio import sleep
 from requests import (
   Session,
   Response,
@@ -16,7 +16,7 @@ class Fetcher:
     self.__user_agent = FakeUserAgent()
 
   @staticmethod
-  def retry(
+  async def retry(
     *args,
     fn: Callable[..., Response],
     retries=3,
@@ -36,14 +36,16 @@ class Fetcher:
         logger.exception(f"Запрос на парсинг страницы по ссылке упал на попытке: {attempt + 1}")
 
         if attempt < retries - 1:
-          sleep(delay)
+          await sleep(delay)
 
     if (last_error):
       return last_error
 
-  def get_with_retry(self, *args, **kwargs) -> Response | RequestException:
+  async def get_with_retry(self, *args, **kwargs) -> Response | RequestException:
     headers = kwargs.get("headers", {})
     headers["user-agent"] = self.__user_agent.random
     kwargs["headers"] = headers
 
-    return self.retry(*args, **kwargs, fn=self.__instance.get)
+    result = await self.retry(*args, **kwargs, fn=self.__instance.get)
+
+    return result
