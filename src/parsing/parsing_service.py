@@ -9,7 +9,6 @@ from .parser_yandex import ParserYandex
 from .parser_cian import ParserCian
 from src.api.parsing_results.parsing_result_types import ParsingResult
 from src.api.search_links.search_link_types import SourceName
-from src.api.parsing_results.parsing_result_types import HousingType
 
 logger = Logger().get_instance()
 
