@@ -23,7 +23,7 @@ class UserService(BaseService):
   async def create_one(self) -> UserModel:
     model = UserModel()
     try:
-      await self.session.add(model)
+      self.session.add(model)
       await self.session.commit()
       await self.session.refresh()
 
