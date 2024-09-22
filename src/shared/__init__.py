@@ -5,4 +5,4 @@ from .db_service import (
 from .base_service import BaseService
 from .fetcher import Fetcher
 from .parser import Parser
-from .logger import Logger
+from .queues import queues
