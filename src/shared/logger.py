@@ -1,3 +1,4 @@
+import os
 import logging
 
 class Logger:
@@ -5,8 +6,16 @@ class Logger:
     self,
     level: int | None = None,
   ) -> None:
+    filename = "log.txt"
+    dir = "logs"
+
+    is_dir_exist = os.path.exists(dir)
+    if not is_dir_exist:
+      os.mkdir(dir)
+    path = os.path.join(dir, filename)
+
     logging.basicConfig(
-      filename="log.txt",
+      filename=path,
       filemode="a",
       level=level,
       datefmt="%Y-%m-%d %H:%M:%S",
