@@ -1,3 +1,4 @@
+from enum import Enum
 from pydantic import (
   BaseModel,
   PostgresDsn,
@@ -7,11 +8,15 @@ from pydantic_settings import (
   SettingsConfigDict,
 )
 
+class AppEnv(Enum):
+  development = "development"
+  production = "production"
+
 class AppConfig(BaseModel):
-  env: str = 'development'
-  host: str = '0.0.0.0'
-  port: int = 8080
-  workers: int = 4
+  env: AppEnv
+  host: str
+  port: int
+  workers: int
 
 class DbConfig(BaseModel):
   url: PostgresDsn
@@ -28,6 +33,9 @@ class DbConfig(BaseModel):
     "pk": "pk_%(table_name)s",
   }
 
+class TgConfig(BaseModel):
+  botapikey: str
+
 class Config(BaseSettings):
   model_config = SettingsConfigDict(
     env_file=".env",
@@ -36,7 +44,8 @@ class Config(BaseSettings):
     env_prefix="",
     extra="allow",
   )
-  app: AppConfig = AppConfig()
+  app: AppConfig
   db: DbConfig
+  tg: TgConfig
 
 config = Config()
