@@ -8,7 +8,7 @@ from fastapi import (
   Query,
   Depends,
 )
-from src.utils import LinkValidator
+from src.utils.link_validator import LinkValidator
 from .search_link_types import SourceName
 
 class CreateOnePayloadDto(BaseModel):

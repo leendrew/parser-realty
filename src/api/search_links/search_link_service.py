@@ -16,7 +16,7 @@ from src.shared import (
   BaseService,
   Logger,
 )
-from src.utils import LinkValidator
+from src.utils.link_validator import LinkValidator
 # ! MIGRATION: comment below before migration
 from src.models.search_link_model import SearchLinkModel
 from src.models.user_model import UserModel

@@ -2,9 +2,9 @@ class CaseConverter:
   @staticmethod
   def camel_case_to_snake_case(string: str) -> str:
     """
-    camel_case_to_snake_case("SomeSDK") -> 'some_sdk'\n
-    camel_case_to_snake_case("RServoDrive") -> 'r_servo_drive'\n
-    camel_case_to_snake_case("SDKDemo") -> 'sdk_demo'\n
+    camel_case_to_snake_case("SomeSDK") -> "some_sdk"\n
+    camel_case_to_snake_case("RServoDrive") -> "r_servo_drive"\n
+    camel_case_to_snake_case("SDKDemo") -> "sdk_demo"\n
     """
     chars = []
     for current_index, char in enumerate(string):
