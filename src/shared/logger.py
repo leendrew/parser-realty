@@ -1,5 +1,9 @@
 import os
 import logging
+from src.config import (
+  config,
+  AppEnv,
+)
 
 class Logger:
   def __init__(
@@ -14,10 +18,17 @@ class Logger:
       os.mkdir(dir)
     path = os.path.join(dir, filename)
 
+    level_by_env_map = {
+      AppEnv.development: None,
+      AppEnv.production: logging.ERROR,
+    }
+    level_by_env = level_by_env_map[config.app.env]
+    log_level = level or level_by_env
+
     logging.basicConfig(
       filename=path,
       filemode="a",
-      level=level,
+      level=log_level,
       datefmt="%Y-%m-%d %H:%M:%S",
       format="[%(asctime)s.%(msecs)03d] %(levelname)-7s %(module)s:%(lineno)d - %(message)s",
     )
