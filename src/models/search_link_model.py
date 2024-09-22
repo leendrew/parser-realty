@@ -7,6 +7,7 @@ from sqlalchemy.orm import (
 from sqlalchemy import (
   BigInteger,
   Text,
+  String,
   Boolean,
 )
 from src.api.search_links.search_link_types import SourceName
@@ -35,6 +36,11 @@ class SearchLinkModel(BaseModel):
   is_active: Mapped[bool] = mapped_column(
     Boolean,
     default=True,
+  )
+
+  name: Mapped[str] = mapped_column(
+    String(255),
+    nullable=True,
   )
 
   # m2m
