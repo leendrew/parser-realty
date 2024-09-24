@@ -10,6 +10,7 @@ from sqlalchemy import (
   String,
   Boolean,
 )
+from sqlalchemy.sql import expression
 from src.api.search_links.search_link_types import SourceName
 from .base_model import BaseModel
 if TYPE_CHECKING:
@@ -29,13 +30,22 @@ class SearchLinkModel(BaseModel):
     Text,
   )
 
-  source_name: Mapped[SourceName] = mapped_column(
+  _source_name: Mapped[SourceName] = mapped_column(
+    "source_name",
     Text,
   )
 
+  @property
+  def source_name(self) -> SourceName:
+    return SourceName[self._source_name]
+
+  @source_name.setter
+  def source_name(self, source: SourceName) -> None:
+    self._source_name = source.value
+
   is_active: Mapped[bool] = mapped_column(
     Boolean,
-    default=True,
+    server_default=expression.true(),
   )
 
   name: Mapped[str] = mapped_column(

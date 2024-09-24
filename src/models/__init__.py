@@ -6,3 +6,4 @@ from .parsing_result_model import ParsingResultModel
 from .city_model import CityModel
 from .metro_station_model import MetroStationModel
 from .city_metro_station_model import CityMetroStationModel
+from .user_telegram_model import UserTelegramModel
