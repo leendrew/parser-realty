@@ -6,7 +6,7 @@ from requests import (
   RequestException,
 )
 from fake_useragent import FakeUserAgent
-from src.shared.logger import Logger
+from src.shared import Logger
 
 logger = Logger().get_instance()
 

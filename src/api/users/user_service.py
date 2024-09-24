@@ -12,8 +12,8 @@ from sqlalchemy import (
   delete,
 )
 from src.shared import (
-  BaseService,
   Logger,
+  BaseService,
 )
 from src.models.user_model import UserModel
 
@@ -25,7 +25,7 @@ class UserService(BaseService):
     try:
       self.session.add(model)
       await self.session.commit()
-      await self.session.refresh()
+      await self.session.refresh(model)
 
       return model
 
@@ -48,27 +48,20 @@ class UserService(BaseService):
   async def get_one(
     self,
     id: UUID,
-  ) -> UserModel:
+  ) -> UserModel | None:
     stmt = (
       select(UserModel)
       .where(UserModel.id == id)
     )
 
     user = await self.session.scalar(stmt)
-    if not user:
-      logger.error(f"Пользователь с id \"{id}\" не найден")
-      # TODO: correct status code
-      raise HTTPException(
-        status_code=400,
-        detail="Пользователь не найден",
-      )
 
     return user
   
   async def delete_one(
     self,
     id: UUID,
-  ) -> UserModel:
+  ) -> UserModel | None:
     stmt = (
       delete(UserModel)
       .where(UserModel.id == id)
@@ -76,9 +69,10 @@ class UserService(BaseService):
     )
 
     try:
-      model = await self.session.scalar(stmt)
+      result = await self.session.scalar(stmt)
+      await self.session.commit()
 
-      return model
+      return result
 
     except Exception:
       await self.session.rollback()

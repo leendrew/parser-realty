@@ -4,8 +4,8 @@ from bs4 import (
   Tag,
   NavigableString,
 )
-from .parser_base import ParserBase
 from src.shared import Logger
+from .parser_base import ParserBase
 from src.api.parsing_results.parsing_result_types import (
   ParsingResult,
   HousingType,

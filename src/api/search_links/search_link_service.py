@@ -13,8 +13,8 @@ from sqlalchemy import (
   delete,
 )
 from src.shared import (
-  BaseService,
   Logger,
+  BaseService,
 )
 from src.utils.link_validator import LinkValidator
 # ! MIGRATION: comment below before migration
@@ -54,7 +54,7 @@ class SearchLinkService(BaseService):
 
     model = SearchLinkModel(
       search_link=link,
-      source_name=source_name.value,
+      source_name=source_name,
     )
     model.users.append(user)
 
@@ -134,7 +134,7 @@ class SearchLinkService(BaseService):
   async def delete_one(
     self,
     id: int,
-  ) -> SearchLinkModel:
+  ) -> SearchLinkModel | None:
     stmt = (
       delete(SearchLinkModel)
       .where(SearchLinkModel.id == id)
@@ -143,6 +143,7 @@ class SearchLinkService(BaseService):
 
     try:
       model = await self.session.scalar(stmt)
+      await self.session.commit()
 
       return model
 

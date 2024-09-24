@@ -19,7 +19,7 @@ class Logger:
     path = os.path.join(dir, filename)
 
     level_by_env_map = {
-      AppEnv.development: None,
+      AppEnv.development: logging.DEBUG,
       AppEnv.production: logging.ERROR,
     }
     level_by_env = level_by_env_map[config.app.env]
@@ -30,7 +30,7 @@ class Logger:
       filemode="a",
       level=log_level,
       datefmt="%Y-%m-%d %H:%M:%S",
-      format="[%(asctime)s.%(msecs)03d] %(levelname)-7s %(module)s:%(lineno)d - %(message)s",
+      format="[%(asctime)s.%(msecs)03d] %(levelname)-9s %(module)s:%(lineno)d - %(message)s",
     )
 
   def get_instance(self) -> logging.Logger:

@@ -1,8 +1,9 @@
 from typing import Annotated
 from fastapi import Depends
 from src.shared import (
-  Fetcher,
   Logger,
+  Fetcher,
+  queues,
 )
 from .parser_avito import ParserAvito
 from .parser_yandex import ParserYandex

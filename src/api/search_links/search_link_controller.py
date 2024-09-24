@@ -1,4 +1,8 @@
-from fastapi import APIRouter
+from fastapi import (
+  APIRouter,
+  HTTPException,
+)
+from src.shared import Logger
 from .search_link_service import SearchLinkServiceDependency
 from .search_link_dtos import (
   CreateOnePayloadDto,
@@ -6,6 +10,8 @@ from .search_link_dtos import (
   EditOnePayloadDto,
 )
 from ..users.user_service import UserServiceDependency
+
+logger = Logger().get_instance()
 
 router = APIRouter(
   prefix="/search-links",
