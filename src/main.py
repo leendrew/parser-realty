@@ -1,16 +1,22 @@
+from asyncio import create_task
 from fastapi import FastAPI
 from fastapi.responses import ORJSONResponse
 from contextlib import asynccontextmanager
 import uvicorn
 from .config import config
-from .shared import db_service
+from .shared import (
+  db_service,
+  queues,
+)
 from .api import api_router
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
   # startup
+  create_task(queues.start())
   yield
   # shutdown
+  await queues.stop()
   await db_service.dispose()
 
 app = FastAPI(

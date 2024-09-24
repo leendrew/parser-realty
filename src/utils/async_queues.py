@@ -5,7 +5,11 @@ from asyncio import (
   sleep,
   Queue,
   Task,
+  Future,
 )
+from src.shared import Logger
+
+logger = Logger().get_instance()
 
 SIGTERM = "stop"
 
@@ -16,6 +20,7 @@ class AsyncQueues:
     queue_delay: int = 2,
   ) -> None:
     self.__queue_delay = queue_delay
+    self.__workers: list[Task] = []
     self.__queues: list[Queue] = []
     for _ in range(queues_len):
       queue = Queue()
@@ -27,36 +32,52 @@ class AsyncQueues:
     queue: Queue,
   ) -> None:
     while True:
-      task = await queue.get()
-      if task is SIGTERM or not callable(task):
-        print(f"Worker \"{name}\" for Queue: {queue} has finished. Task: {task}")
-        break
+      fn, args, kwargs, future = await queue.get()
 
-      await task()
+      logger.info(f"{name} has started. Queue len: {queue.qsize()}")
+
+      if fn is SIGTERM:
+        logger.info(f"{name} receive sigterm")
+        break
+      
+      result = await fn(*args, **kwargs)
+      future.set_result(result)
+      logger.info(f"{name} has finished, going to sleep")
       await sleep(self.__queue_delay)
       queue.task_done()
 
   async def add_task(
     self,
     queue_index: int,
-    fn: Callable | str,
-  ) -> None:
-    task = create_task(fn)
-    queue = self.__queues[queue_index]
-    await queue.put(task)
+    fn: Callable,
+    *args,
+    **kwargs,
+  ) -> Future:
+    if queue_index < 0 or queue_index >= len(self.__queues):
+      message = f"Дэбил, индекс очереди вне диапазона очередей"
+      logger.error(message)
+      raise Exception(message)
 
-    return task
+    queue = self.__queues[queue_index]
+    future = Future()
+    task_data = (fn, args, kwargs, future)
+    await queue.put(task_data)
+    logger.info(f"Put task into queue {queue_index}. Queue len: {queue.qsize()}")
+
+    return future
 
   async def start(self) -> None:
     for index in range(len(self.__queues)):
-      name = f"worker {index}"
+      name = f"Worker-{index}"
       queue = self.__queues[index]
-      await self.__create_worker(name, queue)
+      worker_task = create_task(self.__create_worker(name, queue))
+      self.__workers.append(worker_task)
+      logger.info(f"Create {name} for queue {index}")
 
   async def stop(self) -> None:
     tasks: list[Task] = []
-    for index in range(len(self.__queues)):
-      task = await self.add_task(index, SIGTERM)
+    for queue in self.__queues:
+      task = create_task(queue.put((SIGTERM)))
       tasks.append(task)
 
     await gather(*tasks)
