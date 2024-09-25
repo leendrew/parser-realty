@@ -33,7 +33,7 @@ services:
       context: ./
       dockerfile: dockerfile
       args:
-        BUILD_ENV: development
+        APP_ENV: development
     volumes:
       - ./src:/app/src
       - app_logs:/app/logs
