@@ -7,3 +7,4 @@ from .base_service import BaseService
 from .fetcher import Fetcher
 from .parser import Parser
 from .queues import queues
+from .scheduler import scheduler
