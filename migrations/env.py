@@ -4,7 +4,15 @@ from sqlalchemy import pool
 from sqlalchemy.engine import Connection
 from sqlalchemy.ext.asyncio import async_engine_from_config
 from alembic import context
-from src.models import BaseModel
+from src.models.base_model import BaseModel
+from src.models.user_model import UserModel
+from src.models.search_link_model import SearchLinkModel
+from src.models.user_search_link_model import UserSearchLinkModel
+from src.models.parsing_result_model import ParsingResultModel
+from src.models.city_model import CityModel
+from src.models.metro_station_model import MetroStationModel
+from src.models.city_metro_station_model import CityMetroStationModel
+from src.models.user_telegram_model import UserTelegramModel
 from src.config import config as app_config
 
 # this is the Alembic Config object, which provides
