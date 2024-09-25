@@ -30,18 +30,13 @@ class SearchLinkModel(BaseModel):
     Text,
   )
 
-  _source_name: Mapped[SourceName] = mapped_column(
-    "source_name",
+  source_name: Mapped[SourceName] = mapped_column(
     Text,
   )
 
   @property
-  def source_name(self) -> SourceName:
-    return SourceName[self._source_name]
-
-  @source_name.setter
-  def source_name(self, source: SourceName) -> None:
-    self._source_name = source.value
+  def source_name_enum(self) -> SourceName:
+    return SourceName[self.source_name]
 
   is_active: Mapped[bool] = mapped_column(
     Boolean,

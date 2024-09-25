@@ -17,8 +17,10 @@ from src.shared import (
   BaseService,
 )
 from src.utils.link_validator import LinkValidator
-# ! MIGRATION: comment below before migration
+# ! MIGRATION: comment below and uncomment next before migration
 from src.models.search_link_model import SearchLinkModel
+# class SearchLinkModel:
+#   pass
 from src.models.user_model import UserModel
 from .search_link_types import SourceName
 
