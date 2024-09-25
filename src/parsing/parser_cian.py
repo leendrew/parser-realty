@@ -32,7 +32,7 @@ class ParserCian(ParserBase):
 
     container = body.find(class_=container_regex)
     if not container:
-      message = f"Не нашел контейнер при парсинге источника \"{SourceName.cian}\""
+      message = f"Не нашел контейнер при парсинге источника \"{SourceName.cian.value}\""
       logger.error(message)
       raise Exception(message)
 
@@ -100,6 +100,6 @@ class ParserCian(ParserBase):
         result.append(parsing_result)
 
       except Exception:
-        logger.exception(f"При парсинге источника \"{SourceName.cian}\" что-то пошло не так")
+        logger.exception(f"При парсинге источника \"{SourceName.cian.value}\" что-то пошло не так")
 
     return result

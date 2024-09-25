@@ -34,11 +34,16 @@ class ParserAvito(ParserBase):
     # ¯\_(ツ)_/¯ source specific
     metro_station_name_by_geo_map = {
       "мурино": "Девяткино",
+      "площадь А. Невского I": "Площадь Александра Невского-1",
+      "площадь А. Невского II": "Площадь Александра Невского-2",
+      "технологический ин-т I": "Технологический институт-1",
+      "технологический ин-т I": "Технологический институт-1",
+      "технологический ин-т II": "Технологический институт-2",
     }
 
     container = body.find(attrs={"data-marker": "catalog-serp"})
     if not container:
-      message = f"Не нашел контейнер при парсинге источника \"{SourceName.avito}\""
+      message = f"Не нашел контейнер при парсинге источника \"{SourceName.avito.value}\""
       logger.error(message)
       raise Exception(message)
 
@@ -126,6 +131,6 @@ class ParserAvito(ParserBase):
         result.append(parsing_result)
 
       except Exception:
-        logger.exception(f"При парсинге источника \"{SourceName.avito}\" что-то пошло не так")
+        logger.exception(f"При парсинге источника \"{SourceName.avito.value}\" что-то пошло не так")
 
     return result

@@ -33,7 +33,7 @@ class ParserYandex(ParserBase):
 
     container = body.find(class_="OffersSerp__list")
     if not container:
-      message = f"Не нашел контейнер при парсинге источника \"{SourceName.yandex}\""
+      message = f"Не нашел контейнер при парсинге источника \"{SourceName.yandex.value}\""
       logger.error(message)
       raise Exception(message)
     
@@ -117,6 +117,6 @@ class ParserYandex(ParserBase):
         result.append(parsing_result)
 
       except Exception:
-        logger.exception(f"При парсинге источника \"{SourceName.yandex}\" что-то пошло не так")
+        logger.exception(f"При парсинге источника \"{SourceName.yandex.value}\" что-то пошло не так")
 
     return result
