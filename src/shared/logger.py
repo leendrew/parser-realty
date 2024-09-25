@@ -10,7 +10,7 @@ class Logger:
     self,
     level: int | None = None,
   ) -> None:
-    filename = "log.txt"
+    filename = f"{config.app.env.value}.txt"
     dir = "logs"
 
     is_dir_exist = os.path.exists(dir)
