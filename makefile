@@ -4,7 +4,7 @@ ENV_PATH_DEV := ./.env.development
 ENV_PATH_PROD := ./.env.production
 
 dev-up-bot:
-	python3 -m src.tg_bot.tg_bot
+	python3 -m src.tg_bot.main
 
 compose-prod-build-app:
 	docker compose --env-file $(ENV_PATH_PROD) -f $(COMPOSE_PATH_PROD) build app 
