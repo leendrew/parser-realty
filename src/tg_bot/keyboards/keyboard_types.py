@@ -1,6 +1,4 @@
 from enum import Enum
-from uuid import UUID
-from pydantic import BaseModel
 
 class KeyboardInfoKey(Enum):
   home = "home"

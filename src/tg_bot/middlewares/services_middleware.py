@@ -30,4 +30,6 @@ class ServicesMiddleware(BaseMiddleware):
       data["search_link_service"] = search_link_service
       data["parsing_result_service"] = parsing_result_service
 
-      return await handler(event, data)
+      result = await handler(event, data)
+
+      return result

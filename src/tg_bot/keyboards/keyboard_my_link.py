@@ -13,7 +13,7 @@ from src.models.search_link_model import SearchLinkModel
 
 logger = Logger().get_instance()
 
-def get_home_keyboard(link: SearchLinkModel) -> InlineKeyboardMarkup:
+def get_my_link_keyboard(link: SearchLinkModel) -> InlineKeyboardMarkup:
   builder = InlineKeyboardBuilder()
   builder.button(
     text="Изменить ссылку",
@@ -53,17 +53,3 @@ def get_home_keyboard(link: SearchLinkModel) -> InlineKeyboardMarkup:
   builder.adjust(2)
 
   return builder.as_markup()
-
-def get_my_link_keyboard(key: KeyboardMyLinkKey, *args, **kwargs) -> InlineKeyboardMarkup:
-  keyboard_fn_by_key_map = {
-    KeyboardMenuKey.home: get_home_keyboard,
-  }
-  method = keyboard_fn_by_key_map[key]
-  if not method:
-    message = f"Не нашлось метода клавиатуры для ключа {key.value}"
-    logger.exception(message)
-    raise Exception()
-
-  keyboard = method(*args, **kwargs)
-
-  return keyboard
