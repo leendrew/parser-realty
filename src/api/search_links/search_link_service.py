@@ -8,6 +8,7 @@ from sqlalchemy import (
   select,
   update,
   delete,
+  func,
 )
 from src.shared import (
   Logger,
@@ -22,6 +23,8 @@ from src.models.user_model import UserModel
 from .search_link_types import SourceName
 
 logger = Logger().get_instance()
+
+MAX_USER_LINKS_COUNT = 5
 
 class SearchLinkService(BaseService):
   async def create_one_to_user(
@@ -42,10 +45,25 @@ class SearchLinkService(BaseService):
     if not is_valid_source_link:
       logger.error(f"Ссылки с ресурса \"{source_name}\" не поддерживаются")
       raise Exception("Ссылки данного ресурса не поддерживаются")
+    
+    stmt = (
+      select(func.count())
+      .select_from(SearchLinkModel)
+      .join(SearchLinkModel.users)
+      .where(UserModel.id == user.id)
+    )
+
+    user_search_links_count = await self.session.scalar(stmt)
+    logger.info(f"Количество ссылок: {user_search_links_count} для пользователя с id \"{user.id}\"")
+    if user_search_links_count >= MAX_USER_LINKS_COUNT:
+      message = "Превышено допустимое количество ссылок"
+      logger.error(f"{message} для пользователя с id \"{user.id}\"")
+      raise Exception(message)
 
     model = SearchLinkModel(
       search_link=link,
-      source_name=source_name,
+      source_name=source_name.value,
+      is_active=True,
     )
     model.users.append(user)
 

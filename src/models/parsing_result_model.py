@@ -3,11 +3,6 @@ from typing import (
   TYPE_CHECKING,
 )
 from datetime import datetime
-from sqlalchemy.orm import (
-  mapped_column,
-  relationship,
-  Mapped,
-)
 from sqlalchemy import (
   ForeignKey,
   BigInteger,
@@ -17,7 +12,11 @@ from sqlalchemy import (
   DateTime,
   func,
 )
-from src.api.parsing_results.parsing_result_types import HousingType
+from sqlalchemy.orm import (
+  mapped_column,
+  relationship,
+  Mapped,
+)
 from .base_model import BaseModel
 if TYPE_CHECKING:
   from .user_search_link_model import UserSearchLinkModel
@@ -30,11 +29,6 @@ class ParsingResultModel(BaseModel):
     BigInteger,
     primary_key=True,
     autoincrement=True,
-  )
-
-  created_at: Mapped[datetime] = mapped_column(
-    DateTime(timezone=True),
-    server_default=func.now(),
   )
 
   user_search_link_id: Mapped[int] = mapped_column(
@@ -64,15 +58,6 @@ class ParsingResultModel(BaseModel):
     index=True,
   )
 
-  housing_type: Mapped[HousingType] = mapped_column(
-    Text,
-  )
-
-  flat_room_type: Mapped[int] = mapped_column(
-    SmallInteger,
-    comment="-1 - дом, 0 - студия",
-  )
-
   floor: Mapped[str] = mapped_column(
     String(5),
   )
@@ -87,8 +72,10 @@ class ParsingResultModel(BaseModel):
 
   commission_percent: Mapped[int | None] = mapped_column(
     SmallInteger,
+    nullable=True,
   )
 
   deposit_percent: Mapped[int | None] = mapped_column(
     SmallInteger,
+    nullable=True,
   )

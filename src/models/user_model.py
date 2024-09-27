@@ -1,11 +1,11 @@
 from typing import TYPE_CHECKING
 from uuid import UUID
+from sqlalchemy import func
 from sqlalchemy.orm import (
   mapped_column,
   relationship,
   Mapped,
 )
-from sqlalchemy import func
 from .base_model import BaseModel
 if TYPE_CHECKING:
   from .search_link_model import SearchLinkModel

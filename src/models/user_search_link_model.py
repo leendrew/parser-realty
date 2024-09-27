@@ -1,15 +1,15 @@
 from typing import TYPE_CHECKING
 from uuid import UUID
-from sqlalchemy.orm import (
-  mapped_column,
-  relationship,
-  Mapped,
-)
 from sqlalchemy import (
   ForeignKey,
   UUID as PSQL_UUID,
   Integer,
   BigInteger,
+)
+from sqlalchemy.orm import (
+  mapped_column,
+  relationship,
+  Mapped,
 )
 from .base_model import BaseModel
 if TYPE_CHECKING:

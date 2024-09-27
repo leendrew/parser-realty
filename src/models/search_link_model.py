@@ -1,14 +1,14 @@
 from typing import TYPE_CHECKING
-from sqlalchemy.orm import (
-  mapped_column,
-  relationship,
-  Mapped,
-)
 from sqlalchemy import (
   BigInteger,
   Text,
   String,
   Boolean,
+)
+from sqlalchemy.orm import (
+  mapped_column,
+  relationship,
+  Mapped,
 )
 from sqlalchemy.sql import expression
 from src.api.search_links.search_link_types import SourceName
@@ -35,16 +35,17 @@ class SearchLinkModel(BaseModel):
   )
 
   @property
-  def source_name_enum_value(self) -> SourceName:
+  def source_name_value(self) -> SourceName:
     return SourceName[self.source_name]
 
   is_active: Mapped[bool] = mapped_column(
     Boolean,
+    # or "true"
     server_default=expression.true(),
   )
 
   name: Mapped[str] = mapped_column(
-    String(255),
+    String(64),
     nullable=True,
   )
 

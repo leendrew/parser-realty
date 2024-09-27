@@ -1,12 +1,12 @@
 from typing import TYPE_CHECKING
+from sqlalchemy import (
+  ForeignKey,
+  SmallInteger,
+)
 from sqlalchemy.orm import (
   mapped_column,
   relationship,
   Mapped,
-)
-from sqlalchemy import (
-  ForeignKey,
-  SmallInteger,
 )
 from .base_model import BaseModel
 if TYPE_CHECKING:
