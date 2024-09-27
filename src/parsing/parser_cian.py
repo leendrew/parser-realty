@@ -8,7 +8,6 @@ from src.shared import Logger
 from .parser_base import ParserBase
 from src.api.parsing_results.parsing_result_types import (
   ParsingResult,
-  HousingType,
 )
 from src.api.search_links.search_link_types import SourceName
 
@@ -24,8 +23,6 @@ class ParserCian(ParserBase):
 
     container_regex = re.compile(r"cards-wrapper")
     item_regex = re.compile(r"card-wrapper")
-    flat_room_type_regex = re.compile(r"(\d+)")
-    housing_type_regex = re.compile(r"(студия)?(комната)?", re.MULTILINE | re.IGNORECASE)
     flat_area_regex = re.compile(r"(\d+)")
     floor_regex = re.compile(r"([0-9/]+)")
     price_regex = re.compile(r"\d+")
@@ -46,25 +43,8 @@ class ParserCian(ParserBase):
 
         item_title_text = item_link.text.strip()
         arr = item_title_text.split("･")
-        house_text_raw = arr[0]
         flat_area_raw = arr[1]
         floor_raw = arr[2]
-
-        flat_room_type = 0
-        housing_type = HousingType.house
-        flat_room_type_match = re.search(pattern=flat_room_type_regex, string=house_text_raw)
-        if flat_room_type_match:
-          flat_room_type = int(flat_room_type_match.group(1))
-          housing_type = HousingType.flat
-
-        if not flat_room_type_match:
-          housing_type_match = re.search(pattern=housing_type_regex, string=house_text_raw)
-          studio = housing_type_match.group(1)
-          room = housing_type_match.group(2)
-          if studio:
-            housing_type = HousingType.flat
-          if room:
-            housing_type = HousingType.room
 
         flat_area_match = re.search(pattern=flat_area_regex, string=flat_area_raw)
         flat_area = flat_area_match.group(1)
@@ -88,8 +68,6 @@ class ParserCian(ParserBase):
 
         parsing_result = ParsingResult(
           direct_link=direct_link,
-          housing_type=housing_type,
-          flat_room_type=flat_room_type,
           floor=floor,
           flat_area=flat_area,
           price=price,

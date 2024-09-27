@@ -8,7 +8,6 @@ from src.shared import Logger
 from .parser_base import ParserBase
 from src.api.parsing_results.parsing_result_types import (
   ParsingResult,
-  HousingType,
 )
 from src.api.search_links.search_link_types import SourceName
 
@@ -25,8 +24,6 @@ class ParserAvito(ParserBase):
     item_body_regex = re.compile(r"item-body")
     title_flat_regex = re.compile(r"([^,]+),\s*(\d+(?:[.,]\d+)?).*,\s*([0-9/]+)")
     title_house_regex = re.compile(r"()(\d+).+м²()")
-    housing_type_regex = re.compile(r"(квартира)?(комната)?", re.MULTILINE)
-    flat_room_type_regex = re.compile(r"(\d+)")
     deposit_regex = re.compile(r"\d+")
     commission_percent_regex = re.compile(r"(\d+)")
     item_metro_station_root_container_regex = re.compile(r"geo-root")
@@ -67,22 +64,6 @@ class ParserAvito(ParserBase):
         if not floor:
           floor = "1"
 
-        housing_type = HousingType.house
-        housing_type_match = re.search(pattern=housing_type_regex, string=type)
-        if housing_type_match:
-          flat = housing_type_match.group(1)
-          room = housing_type_match.group(2)
-          if flat:
-            housing_type = HousingType.flat
-          if room:
-            housing_type = HousingType.room
-
-        flat_room_type_match = re.search(pattern=flat_room_type_regex, string=type)
-        flat_room_type = flat_room_type_match and flat_room_type_match.group(1)
-        flat_room_type = flat_room_type and int(flat_room_type) or 0
-        if housing_type is HousingType.house:
-          flat_room_type = -1
-
         item_price = item_body.find(attrs={"itemprop": "price"})
         price = int(item_price.get("content"))
 
@@ -119,8 +100,6 @@ class ParserAvito(ParserBase):
 
         parsing_result = ParsingResult(
           direct_link=direct_link,
-          housing_type=housing_type,
-          flat_room_type=flat_room_type,
           floor=floor,
           flat_area=flat_area,
           price=price,

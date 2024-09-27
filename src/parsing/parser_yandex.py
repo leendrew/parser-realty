@@ -8,7 +8,6 @@ from src.shared import Logger
 from .parser_base import ParserBase
 from src.api.parsing_results.parsing_result_types import (
   ParsingResult,
-  HousingType,
 )
 from src.api.search_links.search_link_types import SourceName
 
@@ -22,7 +21,6 @@ class ParserYandex(ParserBase):
     soup = self.parser.with_lxml(markup=markup)
     body = soup.find(name="body")
 
-    housing_type_regex = re.compile(r"(?:(\d+)?-комн)?(студ)?(комнат)?", re.MULTILINE | re.IGNORECASE)
     flat_area_regex = re.compile(r"(\d+)")
     floor_regex = re.compile(r"\d+")
     price_regex = re.compile(r"\d+")
@@ -47,33 +45,14 @@ class ParserYandex(ParserBase):
 
         title_text = item_link.text.strip()
         flat_area_raw = ""
-        housing_type_raw = ""
         floor_raw = "1"
         arr = title_text.split("·")
         flat_area_raw = arr[0]
         if len(arr) > 1:
-          housing_type_raw = arr[1].strip()
           floor_raw = arr[2]
 
         flat_area_match = re.search(pattern=flat_area_regex, string=flat_area_raw)
         flat_area = flat_area_match.group(1)
-
-        flat_room_type = 0
-        housing_type = HousingType.house
-        housing_type_match = re.match(pattern=housing_type_regex, string=housing_type_raw)
-        if housing_type_match:
-          flat = housing_type_match.group(1)
-          studio = housing_type_match.group(2)
-          room = housing_type_match.group(3)
-          if flat:
-            flat_room_type = int(flat)
-            housing_type = HousingType.flat
-          if studio:
-            housing_type = HousingType.flat
-          if room:
-            housing_type = HousingType.room
-        if housing_type is HousingType.house:
-          flat_room_type = -1
 
         floor_matches = re.findall(pattern=floor_regex, string=floor_raw)
         if floor_matches:
@@ -105,8 +84,6 @@ class ParserYandex(ParserBase):
 
         parsing_result = ParsingResult(
           direct_link=direct_link,
-          housing_type=housing_type,
-          flat_room_type=flat_room_type,
           floor=floor,
           flat_area=flat_area,
           price=price,
