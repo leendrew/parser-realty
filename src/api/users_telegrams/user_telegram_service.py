@@ -37,7 +37,7 @@ class UserTelegramService(BaseService):
       await self.session.rollback()
 
       message = "Ошибка при создании телеграма"
-      logger.exception(f"{message} для пользователя \"{user_id}\" с telegram_id \"{telegram_id}\"")
+      logger.exception(f"{message} для пользователя с id \"{user_id}\" с telegram_id \"{telegram_id}\"")
       raise Exception(message)
 
   async def get_one(
