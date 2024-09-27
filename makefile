@@ -3,6 +3,9 @@ COMPOSE_PATH_PROD := ./compose.prod.yaml
 ENV_PATH_DEV := ./.env.development
 ENV_PATH_PROD := ./.env.production
 
+dev-up-app:
+	python3 -m src.main
+
 dev-up-bot:
 	python3 -m src.tg_bot.main
 
@@ -34,5 +37,5 @@ migration-up:
 migration-down:
 	alembic downgrade -1
 
-migration-down-all:
-	alembic downgrade all
+migration-down-base:
+	alembic downgrade base
