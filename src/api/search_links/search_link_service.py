@@ -35,8 +35,9 @@ class SearchLinkService(BaseService):
   ) -> SearchLinkModel:
     is_link_https = LinkValidator.is_valid_https(link)
     if not is_link_https:
-      logger.error(f"Ссылка \"{link}\" имеет невалидный протокол")
-      raise Exception("Невалидный протокол")
+      message = "Невалидный протокол"
+      logger.error(f"{message} у ссылки \"{link}\"")
+      raise Exception(message)
 
     is_valid_source_link = LinkValidator.is_valid_source(
       source=source_name,
@@ -130,8 +131,9 @@ class SearchLinkService(BaseService):
     except Exception:
       await self.session.rollback()
 
-      logger.exception(f"Ошибка при обновлении ссылки с id \"{id}\"")
-      raise Exception("Ошибка при обновлении ссылки")
+      message = "Ошибка при обновлении ссылки"
+      logger.exception(f"{message} с id \"{id}\"")
+      raise Exception(message)
 
   async def delete_one(
     self,
@@ -152,7 +154,8 @@ class SearchLinkService(BaseService):
     except Exception:
       await self.session.rollback()
 
-      logger.exception(f"Ошибка при удалении ссылки с id \"{id}\"")
-      raise Exception("Ошибка при удалении ссылки")
+      message = "Ошибка при удалении ссылки"
+      logger.exception(f"{message} с id \"{id}\"")
+      raise Exception(message)
 
 SearchLinkServiceDependency = Annotated[SearchLinkService, Depends()]

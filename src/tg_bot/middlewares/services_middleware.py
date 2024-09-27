@@ -13,13 +13,17 @@ from src.api.search_links.search_link_service import SearchLinkService
 from src.api.parsing_results.parsing_result_service import ParsingResultService
 
 class ServicesMiddleware(BaseMiddleware):
+  def __init__(self) -> None:
+    super().__init__()
+    self.__db_service = db_service
+
   async def __call__(
     self,
     handler: Callable[[Message, Dict[str, Any]], Awaitable[Any]],
     event: Message,
     data: Dict[str, Any],
   ) -> Any:
-    async with db_service.session_factory() as session:
+    async with self.__db_service.session_factory() as session:
       user_telegram_service = UserTelegramService(session=session)
       user_service = UserService(session=session)
       search_link_service = SearchLinkService(session=session)

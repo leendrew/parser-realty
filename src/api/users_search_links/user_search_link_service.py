@@ -29,10 +29,10 @@ class UserSearchLinkService(BaseService):
     stmt = (
       select(UserSearchLinkModel)
       .join(UserSearchLinkModel.user)
-      # load to response
+      # add relation model to result
       # .options(joinedload(UserSearchLinkModel.user))
       .join(UserSearchLinkModel.search_link)
-      # load to response
+      # add relation model to result
       # .options(joinedload(UserSearchLinkModel.search_link))
     )
 

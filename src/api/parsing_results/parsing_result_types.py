@@ -1,6 +1,6 @@
 from typing import (
-  Optional,
   TYPE_CHECKING,
+  Optional,
 )
 from pydantic import BaseModel
 if TYPE_CHECKING:

@@ -47,7 +47,7 @@ class ParsingResultService(BaseService):
     except Exception:
       await self.session.rollback()
 
-      message = "Ошибка при сохранении результатов парсинга"
+      message = "Ошибка при сохранении результатов"
       logger.exception(message)
       raise Exception(message)
 

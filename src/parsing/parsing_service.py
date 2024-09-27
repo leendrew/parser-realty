@@ -84,7 +84,7 @@ class ParsingService:
     result = await method(markup=bytes_response)
 
     return result
-  
+
   async def parse_test(
     self,
     source: SourceName,
@@ -109,8 +109,6 @@ class ParsingService:
       # SourceName.yandex: "yandex-room",
       # SourceName.yandex: "yandex-house",
       SourceName.cian: "cian-flat",
-      # SourceName.cian: "cian-room",
-      # SourceName.cian: "cian-house",
     }
 
     filename = f"{filename_by_source[source]}.html"

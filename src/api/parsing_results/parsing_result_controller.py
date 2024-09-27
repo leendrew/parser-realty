@@ -28,15 +28,20 @@ async def get_parsing_results(
 
   # user_id = "0c44ed8c-2fd0-439f-9e73-84b5776c34ac"
   user_id = "ab7536cd-9b3a-4835-a315-aa523c91a0f4"
+  
+  # res = await parsing_service.parse_test(source=SourceName.avito)
+  # return res
+
+  # TODO: try except
   # await parsing_result_service.create_many(result)
   # users_search_links = await user_search_link_service.get_all_by(
   #   user_id=user_id,
   #   is_link_active=True,
   # )
 
-  links = await search_link_service.get_all_by(user_id=user_id, is_active=True)
+  # links = await search_link_service.get_all_by(user_id=user_id, is_active=True)
 
-  return links
+  # return links
   # logger.info(f"Создаю задачи")
   # all = []
   # for link in links:
