@@ -35,7 +35,7 @@ class SearchLinkModel(BaseModel):
   )
 
   @property
-  def source_name_enum(self) -> SourceName:
+  def source_name_enum_value(self) -> SourceName:
     return SourceName[self.source_name]
 
   is_active: Mapped[bool] = mapped_column(
