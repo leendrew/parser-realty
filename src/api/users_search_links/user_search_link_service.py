@@ -3,10 +3,7 @@ from typing import (
   Annotated,
   Sequence,
 )
-from fastapi import (
-  HTTPException,
-  Depends,
-)
+from fastapi import Depends
 from sqlalchemy import select
 from sqlalchemy.orm import joinedload
 from src.shared import (

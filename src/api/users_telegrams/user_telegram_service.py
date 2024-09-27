@@ -3,10 +3,7 @@ from typing import (
   Annotated,
   Sequence,
 )
-from fastapi import (
-  HTTPException,
-  Depends,
-)
+from fastapi import Depends
 from sqlalchemy import (
   select,
 )
@@ -39,12 +36,9 @@ class UserTelegramService(BaseService):
     except Exception:
       await self.session.rollback()
 
-      logger.exception(f"Ошибка при создании телеграма для пользователя \"{user_id}\" с telegram_id: \"{telegram_id}\"")
-      # TODO: correct status code
-      raise HTTPException(
-        status_code=400,
-        detail="Ошибка при создании телеграма",
-      )
+      message = "Ошибка при создании телеграма"
+      logger.exception(f"{message} для пользователя \"{user_id}\" с telegram_id \"{telegram_id}\"")
+      raise Exception(message)
 
   async def get_one(
     self,

@@ -1,8 +1,5 @@
 from typing import Annotated
-from fastapi import (
-  Depends,
-  HTTPException,
-)
+from fastapi import Depends
 from src.shared import (
   Logger,
   BaseService,
@@ -29,11 +26,7 @@ class ParsingResultService(BaseService):
     except Exception:
       message = f"Ошибка при сохранении результата"
       logger.exception(message)
-      # TODO: correct status code
-      raise HTTPException(
-        status_code=400,
-        detail=message,
-      )
+      raise Exception(message)
 
   async def create_many(
     self,
@@ -56,10 +49,6 @@ class ParsingResultService(BaseService):
 
       message = "Ошибка при сохранении результатов парсинга"
       logger.exception(message)
-      # TODO: correct status code
-      raise HTTPException(
-        status_code=400,
-        detail=message,
-      )
+      raise Exception(message)
 
 ParsingResultServiceDependency = Annotated[ParsingResultService, Depends()]

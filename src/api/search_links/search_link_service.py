@@ -3,10 +3,7 @@ from typing import (
   Annotated,
   Sequence,
 )
-from fastapi import (
-  HTTPException,
-  Depends,
-)
+from fastapi import Depends
 from sqlalchemy import (
   select,
   update,
@@ -36,11 +33,7 @@ class SearchLinkService(BaseService):
     is_link_https = LinkValidator.is_valid_https(link)
     if not is_link_https:
       logger.error(f"Ссылка \"{link}\" имеет невалидный протокол")
-      # TODO: correct status code
-      raise HTTPException(
-        status_code=400,
-        detail="Невалидный протокол",
-      )
+      raise Exception("Невалидный протокол")
 
     is_valid_source_link = LinkValidator.is_valid_source(
       source=source_name,
@@ -48,11 +41,7 @@ class SearchLinkService(BaseService):
     )
     if not is_valid_source_link:
       logger.error(f"Ссылки с ресурса \"{source_name}\" не поддерживаются")
-      # TODO: correct status code
-      raise HTTPException(
-        status_code=400,
-        detail="Ссылки данного сайта не поддерживаются",
-      )
+      raise Exception("Ссылки данного ресурса не поддерживаются")
 
     model = SearchLinkModel(
       search_link=link,
@@ -70,12 +59,9 @@ class SearchLinkService(BaseService):
     except Exception:
       await self.session.rollback()
 
-      logger.exception(f"Ошибка при сохранении ссылки \"{link}\" для пользователя с id \"{user.id}\"")
-      # TODO: correct status code
-      raise HTTPException(
-        status_code=400,
-        detail="Ошибка при сохранении ссылки",
-      )
+      message = "Ошибка при сохранении ссылки"
+      logger.exception(f"{message} \"{link}\" для пользователя с id \"{user.id}\"")
+      raise Exception(message)
 
   async def get_all_by(
     self,
@@ -127,11 +113,7 @@ class SearchLinkService(BaseService):
       await self.session.rollback()
 
       logger.exception(f"Ошибка при обновлении ссылки с id \"{id}\"")
-      # TODO: correct status code
-      raise HTTPException(
-        status_code=400,
-        detail="Ошибка при обновлении ссылки",
-      )
+      raise Exception("Ошибка при обновлении ссылки")
 
   async def delete_one(
     self,
@@ -153,10 +135,6 @@ class SearchLinkService(BaseService):
       await self.session.rollback()
 
       logger.exception(f"Ошибка при удалении ссылки с id \"{id}\"")
-      # TODO: correct status code
-      raise HTTPException(
-        status_code=400,
-        detail="Ошибка при удалении ссылки",
-      )
+      raise Exception("Ошибка при удалении ссылки")
 
 SearchLinkServiceDependency = Annotated[SearchLinkService, Depends()]

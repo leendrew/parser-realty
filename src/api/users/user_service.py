@@ -3,10 +3,7 @@ from typing import (
   Annotated,
   Sequence,
 )
-from fastapi import (
-  Depends,
-  HTTPException,
-)
+from fastapi import Depends
 from sqlalchemy import (
   select,
   delete,
@@ -32,12 +29,9 @@ class UserService(BaseService):
     except Exception:
       await self.session.rollback()
 
-      logger.exception(f"Ошибка при создании пользователя")
-      # TODO: correct status code
-      raise HTTPException(
-        status_code=400,
-        detail="Ошибка при создании пользователя",
-      )
+      message = "Ошибка при создании пользователя"
+      logger.exception(message)
+      raise Exception(message)
 
   async def get_all(self) -> Sequence[UserModel]:
     stmt = select(UserModel)
@@ -77,11 +71,10 @@ class UserService(BaseService):
     except Exception:
       await self.session.rollback()
 
-      logger.exception(f"Ошибка при удалении пользователя с id \"{id}\"")
-      # TODO: correct status code
-      raise HTTPException(
-        status_code=400,
-        detail="Ошибка при удалении пользователя",
-      )
+      message = "Ошибка при удалении пользователя"
+      logger.exception(f"{message} с id \"{id}\"")
+      raise Exception(message)
+    
+  # TODO: def_get_user_summary() -> id, количество ссылок, количество результатов парсинга
 
 UserServiceDependency = Annotated[UserService, Depends()]
