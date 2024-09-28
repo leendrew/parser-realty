@@ -10,7 +10,7 @@ logger = Logger().get_instance()
 router = Router()
 
 @router.callback_query(ShowMenuCallbackData.filter())
-async def info_callback_handler(
+async def show_menu_callback_handler(
   cb_query: CallbackQuery,
   callback_data: ShowMenuCallbackData,
 ) -> None:
