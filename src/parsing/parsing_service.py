@@ -121,7 +121,7 @@ class ParsingService:
       logger.error(message)
       raise Exception(message)
 
-    with open(path, "r") as file:
+    with open(file=path, mode="r") as file:
       content = file.read()
       result = await method(markup=content)
 

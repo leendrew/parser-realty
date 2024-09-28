@@ -4,7 +4,9 @@ from typing import (
   Sequence,
 )
 from fastapi import Depends
-from sqlalchemy import select
+from sqlalchemy import (
+  select,
+)
 from sqlalchemy.orm import joinedload
 from src.shared import (
   Logger,

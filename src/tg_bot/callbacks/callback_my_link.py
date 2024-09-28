@@ -19,5 +19,5 @@ async def my_link_callback_handler(
   tg_user = cb_query.from_user
 
   await cb_query.message.edit_text("Загрузка...")
-  await sleep(5)
+  await sleep(2)
   await cb_query.message.edit_text("Загрузка завершена")

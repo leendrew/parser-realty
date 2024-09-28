@@ -27,8 +27,7 @@ async def menu_callback_handler(
   tg_user = cb_query.from_user
 
   keyboard = get_menu_keyboard()
-  await cb_query.message.edit_text(
-    text=cb_query.message.text,
+  await cb_query.message.edit_reply_markup(
     reply_markup=keyboard,
   )
 

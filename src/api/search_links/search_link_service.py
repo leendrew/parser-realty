@@ -49,13 +49,11 @@ class SearchLinkService(BaseService):
     
     stmt = (
       select(func.count())
-      .select_from(SearchLinkModel)
       .join(SearchLinkModel.users)
       .where(UserModel.id == user.id)
     )
 
     user_search_links_count = await self.session.scalar(stmt)
-    logger.info(f"Количество ссылок: {user_search_links_count} для пользователя с id \"{user.id}\"")
     if user_search_links_count >= MAX_USER_LINKS_COUNT:
       message = "Превышено допустимое количество ссылок"
       logger.error(f"{message} для пользователя с id \"{user.id}\"")
