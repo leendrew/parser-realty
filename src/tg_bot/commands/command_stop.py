@@ -31,7 +31,7 @@ async def on_command_stop(
     )
     return
 
-  keyboard = get_stop_keyboard(telegram_user=telegram_user)
+  keyboard = get_stop_keyboard(user_id=telegram_user.user_id)
   text = markdown.text(
     "Вы уверены, что хотите удалить все данные?",
     "Их нельзя будет восстановить",
