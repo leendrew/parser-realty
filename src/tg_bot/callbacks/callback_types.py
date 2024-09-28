@@ -3,18 +3,18 @@ from uuid import UUID
 from pydantic import BaseModel
 from aiogram.filters.callback_data import CallbackData
 from ..keyboards.keyboard_types import (
-  KeyboardInfoKey,
+  KeyboardShowMenuKey,
   KeyboardMenuKey,
   KeyboardMyLinkKey,
   KeyboardStopKey,
 )
 from src.api.search_links.search_link_types import SourceName
 
-class InfoCallbackData(
+class ShowMenuCallbackData(
   CallbackData,
-  prefix="info",
+  prefix="show_menu",
 ):
-  action: KeyboardInfoKey
+  action: KeyboardShowMenuKey
 
 class MenuCallbackData(
   CallbackData,

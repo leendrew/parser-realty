@@ -8,7 +8,7 @@ from ..callbacks.callback_types import MenuCallbackData
 
 logger = Logger().get_instance()
 
-def get_info_keyboard() -> InlineKeyboardMarkup:
+def get_show_menu_keyboard() -> InlineKeyboardMarkup:
   builder = InlineKeyboardBuilder()
   builder.button(
     text="Меню",
