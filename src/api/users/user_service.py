@@ -3,16 +3,22 @@ from typing import (
   Annotated,
   Sequence,
 )
+from asyncio import gather
 from fastapi import Depends
 from sqlalchemy import (
   select,
   delete,
+  func,
 )
 from src.shared import (
   Logger,
   BaseService,
 )
 from src.models.user_model import UserModel
+from src.models.user_search_link_model import UserSearchLinkModel
+from src.models.search_link_model import SearchLinkModel
+from src.models.parsing_result_model import ParsingResultModel
+from .user_types import UserSummary
 
 logger = Logger().get_instance()
 
@@ -75,6 +81,35 @@ class UserService(BaseService):
       logger.exception(f"{message} с id \"{id}\"")
       raise Exception(message)
     
-  # TODO: def_get_user_summary() -> id, количество ссылок, количество результатов парсинга
+  async def get_user_summary(
+    self,
+    id: UUID,
+  ) -> UserSummary:
+    user_search_links_count_stmt = (
+      select(func.count())
+      .join(SearchLinkModel.users)
+      .where(UserModel.id == id)
+    )
+
+    user_parsing_results_count_stmt = (
+      select(func.count())
+      .join(UserSearchLinkModel.parsing_results)
+      .where(ParsingResultModel.user_search_link_id == UserSearchLinkModel.id)
+      .where(UserSearchLinkModel.user_id == id)
+    )
+
+    tasks = [
+      self.session.scalar(user_search_links_count_stmt),
+      self.session.scalar(user_parsing_results_count_stmt),
+    ]
+    user_search_links_count, user_parsing_results_count = await gather(*tasks)
+    print(user_search_links_count, user_parsing_results_count)
+    result = UserSummary(
+      id=id,
+      search_links_count=user_search_links_count,
+      parsing_results_count=user_parsing_results_count
+    )
+
+    return result
 
 UserServiceDependency = Annotated[UserService, Depends()]
