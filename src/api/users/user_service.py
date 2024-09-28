@@ -103,7 +103,6 @@ class UserService(BaseService):
       self.session.scalar(user_parsing_results_count_stmt),
     ]
     user_search_links_count, user_parsing_results_count = await gather(*tasks)
-    print(user_search_links_count, user_parsing_results_count)
     result = UserSummary(
       id=id,
       search_links_count=user_search_links_count,
