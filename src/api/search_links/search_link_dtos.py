@@ -9,9 +9,13 @@ from fastapi import (
   Depends,
 )
 from src.utils.link_validator import LinkValidator
-from .search_link_types import SourceName
+from .search_link_types import (
+  SourceName,
+  SearchType,
+)
 
 class CreateOnePayloadDto(BaseModel):
+  search_type: SearchType
   link: str
   source_name: SourceName
   user_id: UUID
@@ -33,6 +37,7 @@ class CreateOnePayloadDto(BaseModel):
 
 class GetAllByQueryDto(BaseModel):
   id: Annotated[int | None, Query(default=None)] = None
+  search_type: Annotated[SearchType | None, Query()] = None
   source_name: Annotated[SourceName | None, Query()] = None
   is_active: Annotated[bool | None, Query()] = None
   user_id: Annotated[UUID | None, Query()] = None
