@@ -76,9 +76,9 @@ class ParsingService:
 
     method = method_by_source[source]
     if not method:
-      message = f"Для источника \"{source}\" не нашлось парсера"
+      message = f"Для источника \"{source.name}\" не нашлось парсера"
       logger.error(message)
-      raise Exception(message)
+      raise ValueError(message)
 
     fetch_response = await self.fetcher.get_with_retry(url=link)
     bytes_response = fetch_response.content
@@ -99,9 +99,9 @@ class ParsingService:
 
     method = method_by_source[source]
     if not method:
-      message = f"Для источника \"{source}\" не нашлось парсера"
+      message = f"Для источника \"{source.name}\" не нашлось парсера"
       logger.error(message)
-      raise Exception(message)
+      raise ValueError(message)
 
     filename_by_source = {
       SourceName.avito: "avito-flat",
@@ -119,9 +119,9 @@ class ParsingService:
     import os
     path = os.path.join(folder_name, filename)
     if path is None:
-      message = f"Для источника \"{source}\" не нашлось тестового файла"
+      message = f"Для источника \"{source.name}\" не нашлось тестового файла"
       logger.error(message)
-      raise Exception(message)
+      raise ValueError(message)
 
     with open(file=path, mode="r") as file:
       content = file.read()

@@ -33,8 +33,8 @@ class ParserYandex(ParserBase):
     if not container:
       message = f"Не нашел контейнер при парсинге источника \"{SourceName.yandex.value}\""
       logger.error(message)
-      raise Exception(message)
-    
+      raise ValueError(message)
+
     result: list[ParsingResult] = []
 
     items: ResultSet[Tag | NavigableString] | None = container.find_all(class_="OffersSerpItem__main")

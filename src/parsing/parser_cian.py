@@ -31,7 +31,7 @@ class ParserCian(ParserBase):
     if not container:
       message = f"Не нашел контейнер при парсинге источника \"{SourceName.cian.value}\""
       logger.error(message)
-      raise Exception(message)
+      raise ValueError(message)
 
     result: list[ParsingResult] = []
 

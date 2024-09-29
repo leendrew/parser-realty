@@ -54,9 +54,9 @@ class AsyncQueues:
     **kwargs,
   ) -> Future:
     if queue_index < 0 or queue_index >= len(self.__queues):
-      message = f"Дэбил, индекс очереди вне диапазона очередей"
+      message = f"Индекс вне доступного диапазона"
       logger.error(message)
-      raise Exception(message)
+      raise ValueError(message)
 
     queue = self.__queues[queue_index]
     future = Future()

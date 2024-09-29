@@ -39,7 +39,7 @@ class SearchLinkService(BaseService):
     if not is_link_https:
       message = "Невалидный протокол"
       logger.error(f"{message} у ссылки \"{link}\"")
-      raise Exception(message)
+      raise ValueError(message)
 
     is_valid_source_link = LinkValidator.is_valid_source(
       source=source_name,
@@ -47,7 +47,7 @@ class SearchLinkService(BaseService):
     )
     if not is_valid_source_link:
       logger.error(f"Ссылки с сайта \"{source_name.value}\" не поддерживаются")
-      raise Exception("Ссылки данного сайте не поддерживаются")
+      raise ValueError("Ссылки данного сайте не поддерживаются")
     
     stmt = (
       select(func.count())
@@ -59,7 +59,7 @@ class SearchLinkService(BaseService):
     if user_search_links_count >= MAX_USER_LINKS_COUNT:
       message = "Превышено допустимое количество ссылок"
       logger.error(f"{message} для пользователя с id \"{user.id}\"")
-      raise Exception(message)
+      raise ValueError(message)
 
     model = SearchLinkModel(
       search_type=search_type.value,

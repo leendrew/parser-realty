@@ -42,7 +42,7 @@ class ParserAvito(ParserBase):
     if not container:
       message = f"Не нашел контейнер при парсинге источника \"{SourceName.avito.value}\""
       logger.error(message)
-      raise Exception(message)
+      raise ValueError(message)
 
     result: list[ParsingResult] = []
 
