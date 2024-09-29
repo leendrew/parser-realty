@@ -11,10 +11,11 @@ logger = Logger().get_instance()
 router = Router()
 
 @router.message(Command(CommandKey.menu.value))
-async def on_command_menu(
+async def on_command_menu_handler(
   message: Message,
 ) -> None:
   keyboard = get_menu_keyboard()
+  # TODO: text
   text = markdown.text(
     "Это типо меню",
     "Выберите действие",

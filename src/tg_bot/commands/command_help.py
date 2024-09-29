@@ -11,7 +11,7 @@ logger = Logger().get_instance()
 router = Router()
 
 @router.message(Command(CommandKey.help.value))
-async def on_command_show_menu(
+async def on_command_help_handler(
   message: Message,
 ) -> None:
   keyboard = get_menu_init_keyboard()

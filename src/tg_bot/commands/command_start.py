@@ -12,7 +12,7 @@ logger = Logger().get_instance()
 router = Router()
 
 @router.message(CommandStart())
-async def on_command_start(
+async def on_command_start_handler(
   message: Message,
   user_telegram_service: UserTelegramService,
   user_service: UserService,

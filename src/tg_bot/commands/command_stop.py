@@ -12,7 +12,7 @@ logger = Logger().get_instance()
 router = Router()
 
 @router.message(Command(CommandKey.stop.value))
-async def on_command_stop(
+async def on_command_stop_handler(
   message: Message,
   user_telegram_service: UserTelegramService,
 ) -> None:
