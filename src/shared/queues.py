@@ -1,5 +1,5 @@
 from src.utils.async_queues import AsyncQueues
-# TODO: cycle import
+# TODO: resolve cycle import
 # from src.api.search_links.search_link_types import SourceName
 
 queues = AsyncQueues(
