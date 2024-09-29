@@ -38,7 +38,7 @@ async def stop_callback_handler(
       """
     )
     text = markdown.text(
-      "Вы удалены из системы",
+      "Вы удалены из сервиса",
       "Ваша статистика:",
       f"id - {user_summary.id}",
       f"Количество ссылок - {user_summary.search_links_count}",

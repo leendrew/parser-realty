@@ -24,7 +24,7 @@ async def on_command_start(
     keyboard = get_menu_init_keyboard()
     text = markdown.text(
       f"Привет, {tg_user.first_name}.",
-      "Вы уже в системе",
+      "Вы уже в сервисе",
       sep="\n",
     )
 
@@ -43,7 +43,7 @@ async def on_command_start(
   keyboard = get_menu_init_keyboard()
   text = markdown.text(
     f"Привет, {tg_user.full_name}.",
-    "Вы добавлены в систему",
+    "Вы добавлены в сервис",
     sep="\n",
   )
 

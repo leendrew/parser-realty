@@ -21,7 +21,7 @@ async def on_command_stop(
   telegram_user = await user_telegram_service.get_one(telegram_id=tg_user.id)
   if not telegram_user:
     text = markdown.text(
-      "Ошибка! Вас нет в системе",
+      "Ошибка! Вас нет в сервисе",
       "Для начала введите " + markdown.hbold(f"\/{CommandKey.start.value}"),
       sep="\n",
     )
