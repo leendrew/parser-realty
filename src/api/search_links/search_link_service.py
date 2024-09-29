@@ -31,6 +31,7 @@ class SearchLinkService(BaseService):
     self,
     link: str,
     source_name: SourceName,
+    name: str,
     user: UserModel,
   ) -> SearchLinkModel:
     is_link_https = LinkValidator.is_valid_https(link)
@@ -62,6 +63,7 @@ class SearchLinkService(BaseService):
     model = SearchLinkModel(
       search_link=link,
       source_name=source_name.value,
+      name=name,
       is_active=True,
     )
     model.users.append(user)
