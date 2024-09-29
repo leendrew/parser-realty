@@ -59,4 +59,3 @@ async def stop_callback_handler(
       text=text,
       reply_markup=keyboard,
     )
-    return

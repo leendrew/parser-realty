@@ -19,13 +19,16 @@ class MenuCallbackData(
 ):
   action: KeyboardMenuKey
 
+class AddLinkCallbackPayload(BaseModel):
+  search_type: SearchType | None = None
+  source_name: SourceName | None = None
+
 class AddLinkCallbackData(
   CallbackData,
+  AddLinkCallbackPayload,
   prefix="add_link",
 ):
   action: KeyboardAddLinkKey
-  search_type: SearchType | None = None
-  source_name: SourceName | None = None
 
 class MyLinkCallbackPayload(BaseModel):
   id: int | None = None
