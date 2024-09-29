@@ -40,7 +40,6 @@ class SearchLinkModel(BaseModel):
 
   is_active: Mapped[bool] = mapped_column(
     Boolean,
-    # or "true"
     server_default=expression.true(),
   )
 
