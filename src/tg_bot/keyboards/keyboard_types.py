@@ -6,6 +6,12 @@ class KeyboardMenuKey(Enum):
   my_links = "my_links"
   add_link = "add_link"
 
+class KeyboardAddLinkKey(Enum):
+  home = "home"
+  name = "name"
+  back = "back"
+  reset = "reset"
+
 class KeyboardMyLinkKey(Enum):
   home = "home"
   edit_link = "edit_link"

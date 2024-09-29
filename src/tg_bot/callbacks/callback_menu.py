@@ -4,6 +4,10 @@ from aiogram.types import CallbackQuery
 from src.shared import Logger
 from .callback_types import MenuCallbackData
 from ..keyboards.keyboard_types import KeyboardMenuKey
+from ..keyboards.keyboard_menu import (
+  get_menu_keyboard,
+  get_add_link_keyboard,
+)
 from src.api.users_telegrams.user_telegram_service import UserTelegramService
 from src.api.users.user_service import UserService
 from src.api.search_links.search_link_service import SearchLinkService
@@ -35,8 +39,21 @@ async def menu_callback_handler(
     reply_markup=keyboard,
   )
 
-  # telegram_user = await user_telegram_service.get_one(telegram_id=tg_user.id)
+@router.callback_query(MenuCallbackData.filter(F.action == KeyboardMenuKey.add_link))
+async def on_add_link_handler(
+  cb_query: CallbackQuery,
+  callback_data: MenuCallbackData,
+):
+  logger.info(f"AddLink {callback_data}")
+  await cb_query.answer()
+  tg_user = cb_query.from_user
 
-  # if not telegram_user:
-  #   await cb_query.answer(f"Вас нет в системе, для начала введите /start")
-  #   return
+  keyboard = get_add_link_keyboard()
+  text = markdown.text(
+    "Выбери что-то",
+    sep="\n",
+  )
+  await cb_query.message.edit_text(
+    text=text,
+    reply_markup=keyboard,
+  )
