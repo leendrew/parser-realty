@@ -46,8 +46,8 @@ class SearchLinkService(BaseService):
       link=link
     )
     if not is_valid_source_link:
-      logger.error(f"Ссылки с ресурса \"{source_name.value}\" не поддерживаются")
-      raise Exception("Ссылки данного ресурса не поддерживаются")
+      logger.error(f"Ссылки с сайта \"{source_name.value}\" не поддерживаются")
+      raise Exception("Ссылки данного сайте не поддерживаются")
     
     stmt = (
       select(func.count())

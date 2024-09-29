@@ -14,11 +14,11 @@ search_type_title_map = {
 
 class SourceName(Enum):
   avito = "avito"
-  yandex = "yandex"
   cian = "cian"
+  yandex = "yandex"
 
 source_name_title_map = {
   SourceName.avito: "Авито",
-  SourceName.yandex: "Яндекс Недвижимость",
   SourceName.cian: "Циан",
+  SourceName.yandex: "Яндекс Недвижимость",
 }

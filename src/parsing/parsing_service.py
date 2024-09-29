@@ -33,7 +33,9 @@ class ParsingService:
 
     queue_index = queue_index_by_source[source]
     if queue_index is None:
-      logger.error(f"Вы дэбил. {source} {queue_index}")
+      message = "Вы дэбил"
+      logger.error(f"{message} {source} {queue_index}")
+      raise IndexError(message)
 
     task = await queues.add_task(
       queue_index=queue_index,
