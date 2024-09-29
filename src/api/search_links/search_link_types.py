@@ -1,4 +1,16 @@
-from enum import Enum
+from enum import (
+  Enum,
+  IntEnum,
+)
+
+class SearchType(IntEnum):
+  rent = 1
+  purchase = 2
+
+search_type_title_map = {
+  SearchType.rent: "Аренда",
+  SearchType.purchase: "Покупка",
+}
 
 class SourceName(Enum):
   avito = "avito"

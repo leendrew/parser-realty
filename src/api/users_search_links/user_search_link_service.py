@@ -13,10 +13,7 @@ from src.shared import (
   BaseService,
 )
 from src.models.user_search_link_model import UserSearchLinkModel
-# ! MIGRATION: comment below and uncomment next before migration
 from src.models.search_link_model import SearchLinkModel
-# class SearchLinkModel:
-#   pass
 
 logger = Logger().get_instance()
 

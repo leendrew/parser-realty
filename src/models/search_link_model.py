@@ -1,6 +1,11 @@
 from typing import TYPE_CHECKING
+from enum import (
+  Enum,
+  IntEnum,
+)
 from sqlalchemy import (
   BigInteger,
+  SmallInteger,
   Text,
   String,
   Boolean,
@@ -11,11 +16,20 @@ from sqlalchemy.orm import (
   Mapped,
 )
 from sqlalchemy.sql import expression
-from src.api.search_links.search_link_types import SourceName
 from .base_model import BaseModel
 if TYPE_CHECKING:
   from .user_model import UserModel
   from .user_search_link_model import UserSearchLinkModel
+
+# ! FIX: duplicate from src.api.search_links.search_links_types cause its cycle import
+class SearchType(IntEnum):
+  rent = 1
+  purchase = 2
+
+class SourceName(Enum):
+  avito = "avito"
+  yandex = "yandex"
+  cian = "cian"
 
 class SearchLinkModel(BaseModel):
   __tablename__ = "search_links"
@@ -26,16 +40,24 @@ class SearchLinkModel(BaseModel):
     autoincrement=True,
   )
 
+  search_type: Mapped[int] = mapped_column(
+    SmallInteger,
+  )
+
+  @property
+  def search_type_enum(self) -> SearchType:
+    return SearchType[self.search_type]
+
   search_link: Mapped[str] = mapped_column(
     Text,
   )
 
-  source_name: Mapped[SourceName] = mapped_column(
+  source_name: Mapped[str] = mapped_column(
     Text,
   )
 
   @property
-  def source_name_value(self) -> SourceName:
+  def source_name_enum(self) -> SourceName:
     return SourceName[self.source_name]
 
   is_active: Mapped[bool] = mapped_column(
@@ -45,7 +67,6 @@ class SearchLinkModel(BaseModel):
 
   name: Mapped[str] = mapped_column(
     String(64),
-    nullable=True,
   )
 
   # m2m

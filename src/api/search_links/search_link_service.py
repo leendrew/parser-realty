@@ -15,12 +15,12 @@ from src.shared import (
   BaseService,
 )
 from src.utils.link_validator import LinkValidator
-# ! MIGRATION: comment below and uncomment next before migration
 from src.models.search_link_model import SearchLinkModel
-# class SearchLinkModel:
-#   pass
 from src.models.user_model import UserModel
-from .search_link_types import SourceName
+from .search_link_types import (
+  SourceName,
+  SearchType,
+)
 
 logger = Logger().get_instance()
 
@@ -29,6 +29,7 @@ MAX_USER_LINKS_COUNT = 5
 class SearchLinkService(BaseService):
   async def create_one_to_user(
     self,
+    search_type: SearchType,
     link: str,
     source_name: SourceName,
     name: str,
@@ -45,7 +46,7 @@ class SearchLinkService(BaseService):
       link=link
     )
     if not is_valid_source_link:
-      logger.error(f"Ссылки с ресурса \"{source_name}\" не поддерживаются")
+      logger.error(f"Ссылки с ресурса \"{source_name.value}\" не поддерживаются")
       raise Exception("Ссылки данного ресурса не поддерживаются")
     
     stmt = (
@@ -61,6 +62,7 @@ class SearchLinkService(BaseService):
       raise Exception(message)
 
     model = SearchLinkModel(
+      search_type=search_type.value,
       search_link=link,
       source_name=source_name.value,
       name=name,
@@ -85,6 +87,7 @@ class SearchLinkService(BaseService):
   async def get_all_by(
     self,
     id: int | None = None,
+    search_type: SearchType | None = None,
     source_name: SourceName | None = None,
     is_active: bool | None = None,
     user_id: UUID | None = None,
@@ -97,6 +100,8 @@ class SearchLinkService(BaseService):
     filters = []
     if id is not None:
       filters.append(SearchLinkModel.id == id)
+    if search_type is not None:
+      filters.append(SearchLinkModel.search_type == search_type.value)
     if source_name is not None:
       filters.append(SearchLinkModel.source_name == source_name.value)
     if is_active is not None:
