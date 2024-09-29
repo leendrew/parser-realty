@@ -1,6 +1,5 @@
 from aiogram.types import InlineKeyboardMarkup
 from aiogram.utils.keyboard import InlineKeyboardBuilder
-from src.shared import Logger
 from .keyboard_types import (
   KeyboardMenuKey,
   KeyboardMyLinkKey,
@@ -10,8 +9,6 @@ from ..callbacks.callback_types import (
   MyLinkCallbackData,
 )
 from src.models.search_link_model import SearchLinkModel
-
-logger = Logger().get_instance()
 
 def get_my_link_keyboard(link: SearchLinkModel) -> InlineKeyboardMarkup:
   builder = InlineKeyboardBuilder()

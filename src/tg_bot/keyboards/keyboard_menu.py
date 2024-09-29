@@ -1,17 +1,20 @@
 from aiogram.types import InlineKeyboardMarkup
 from aiogram.utils.keyboard import InlineKeyboardBuilder
-from src.shared import Logger
 from .keyboard_types import (
   KeyboardMenuKey,
+  KeyboardAddLinkKey,
   KeyboardMyLinkKey,
 )
 from ..callbacks.callback_types import (
   MenuCallbackData,
+  AddLinkCallbackData,
   MyLinkCallbackData,
 )
 from src.models.search_link_model import SearchLinkModel
-
-logger = Logger().get_instance()
+from src.api.search_links.search_link_types import (
+  SearchType,
+  search_type_title_map,
+)
 
 def get_menu_init_keyboard() -> InlineKeyboardMarkup:
   builder = InlineKeyboardBuilder()
@@ -66,5 +69,29 @@ def get_my_links_keyboard(links: list[SearchLinkModel]) -> InlineKeyboardMarkup:
     ).pack(),
   )
   builder.adjust(1)
+
+  return builder.as_markup()
+
+def get_add_link_keyboard():
+  builder = InlineKeyboardBuilder()
+
+  for search_type in SearchType:
+    search_type_title = search_type_title_map[search_type]
+
+    builder.button(
+      text=search_type_title,
+      callback_data=AddLinkCallbackData(
+        action=KeyboardAddLinkKey.home,
+        search_type=search_type,
+      ).pack(),
+    )
+
+  builder.button(
+    text="Назад",
+    callback_data=MenuCallbackData(
+      action=KeyboardMenuKey.home,
+    ).pack(),
+  )
+  builder.adjust(2)
 
   return builder.as_markup()

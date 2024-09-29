@@ -1,15 +1,12 @@
 from uuid import UUID
 from aiogram.types import InlineKeyboardMarkup
 from aiogram.utils.keyboard import InlineKeyboardBuilder
-from src.shared import Logger
 from .keyboard_types import (
   KeyboardStopKey,
 )
 from ..callbacks.callback_types import (
   StopCallbackData,
 )
-
-logger = Logger().get_instance()
 
 def get_stop_keyboard(user_id: UUID) -> InlineKeyboardMarkup:
   builder = InlineKeyboardBuilder()
