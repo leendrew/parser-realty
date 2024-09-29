@@ -12,9 +12,6 @@ logger = Logger().get_instance()
 
 router = Router()
 
-# @router.callback_query(MenuCallbackData.filter(F.action == KeyboardMenuKey.foo))
-
-
 @router.callback_query(MenuCallbackData.filter(F.action == KeyboardMenuKey.home))
 async def menu_callback_handler(
   cb_query: CallbackQuery,
