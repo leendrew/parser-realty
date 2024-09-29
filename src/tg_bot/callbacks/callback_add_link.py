@@ -53,9 +53,7 @@ async def on_add_link_source_name_handler(
   callback_data: AddLinkCallbackData,
   state: FSMContext,
 ) -> None:
-  logger.info("AddLink SourceName")
   await cb_query.answer()
-  tg_user = cb_query.from_user
   await state.update_data(last_bot_message_id=cb_query.message.message_id)
   await state.update_data(search_type=callback_data.search_type)
   await state.set_state(AddLinkState.source_name)
@@ -79,7 +77,6 @@ async def on_add_link_name_callback_handler(
   callback_data: AddLinkCallbackData,
   state: FSMContext,
 ) -> None:
-  logger.info("AddLink Name")
   await cb_query.answer()
   await state.update_data(last_bot_message_id=cb_query.message.message_id)
   await state.update_data(source_name=callback_data.source_name)
@@ -104,7 +101,6 @@ async def on_add_link_name_correct_handler(
   message: Message,
   state: FSMContext,
 ) -> None:
-  logger.info(f"AddLink Name Correct")
   await state.update_data(name=message.text)
   await state.set_state(AddLinkState.search_link)
 
@@ -131,8 +127,6 @@ async def on_add_link_name_correct_handler(
 
 @router.message(AddLinkState.name)
 async def on_add_link_name_incorrect_handler(message: Message) -> None:
-  logger.info(f"AddLink Name Incorrect")
-
   text = markdown.text(
     "Ошибка! Я просил ввести текст",
     "Попробуйте еще раз",
@@ -152,7 +146,6 @@ async def on_add_link_search_link_correct_handler(
   user_service: UserService,
   search_link_service: SearchLinkService,
 ) -> None:
-  logger.info(f"AddLink SearchLink Correct")
   tg_user = message.from_user
 
   link = message.text
@@ -224,9 +217,6 @@ async def on_add_link_search_link_correct_handler(
 
 @router.message(AddLinkState.search_link)
 async def on_add_link_search_link_incorrect_handler(message: Message) -> None:
-  logger.info(f"AddLink SearchLink Incorrect")
-  logger.info(message)
-
   text = markdown.text(
     "Ошибка! Это не ссылка",
     "Попробуйте еще раз",
@@ -242,10 +232,8 @@ async def on_add_link_search_link_incorrect_handler(message: Message) -> None:
 )
 async def on_add_link_reset_handler(
   cb_query: CallbackQuery,
-  callback_data: AddLinkCallbackData,
   state: FSMContext,
 ) -> None:
-  logger.info(f"AddLink Reset {callback_data}")
   await cb_query.answer()
   await state.clear()
 
