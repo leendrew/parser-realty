@@ -1,21 +1,21 @@
-# from fastapi import (
-#   APIRouter,
-#   HTTPException,
-# )
-# from src.shared import Logger
-# from .search_link_service import SearchLinkServiceDependency
-# from .search_link_dtos import (
-#   CreateOnePayloadDto,
-#   GetAllByQueryDtoDependency,
-#   EditOnePayloadDto,
-# )
+from fastapi import (
+  APIRouter,
+  HTTPException,
+)
+from src.shared import Logger
+from .search_link_service import SearchLinkServiceDependency
+from .search_link_dtos import (
+  CreateOnePayloadDto,
+  GetAllByQueryDtoDependency,
+  EditOnePayloadDto,
+)
 # from ..users.user_service import UserServiceDependency
 
-# logger = Logger().get_instance()
+logger = Logger().get_instance()
 
-# router = APIRouter(
-#   prefix="/search-links",
-# )
+router = APIRouter(
+  prefix="/search-links",
+)
 
 # @router.post("/")
 # async def create_one(
@@ -23,8 +23,7 @@
 #   user_service: UserServiceDependency,
 #   payload: CreateOnePayloadDto,
 # ):
-#   # TODO: вынести содержимое в отдельную функцию/сервис (потому что эти же действия нужно будет делать в боте)
-#   user = await user_service.get_one(user_id=payload.user_id)
+#   user = await user_service.get_one(id=payload.user_id)
 #   if not user:
 #     logger.error(f"Пользователь с id \"{id}\" не найден")
 #     # TODO: correct status code
@@ -48,7 +47,7 @@
 # ):
 #   result = await search_link_service.get_all_by(**query.model_dump())
 
-#   return result
+  # return result
 
 # @router.patch("/{id}")
 # async def edit_one(
