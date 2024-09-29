@@ -3,7 +3,7 @@ from aiogram.utils import markdown
 from aiogram.types import CallbackQuery
 from src.shared import Logger
 from .callback_types import MenuCallbackData
-from ..keyboards.keyboard_menu import get_menu_keyboard
+from ..keyboards.keyboard_types import KeyboardMenuKey
 from src.api.users_telegrams.user_telegram_service import UserTelegramService
 from src.api.users.user_service import UserService
 from src.api.search_links.search_link_service import SearchLinkService
@@ -14,7 +14,8 @@ router = Router()
 
 # @router.callback_query(MenuCallbackData.filter(F.action == KeyboardMenuKey.foo))
 
-@router.callback_query(MenuCallbackData.filter())
+
+@router.callback_query(MenuCallbackData.filter(F.action == KeyboardMenuKey.home))
 async def menu_callback_handler(
   cb_query: CallbackQuery,
   callback_data: MenuCallbackData,
@@ -27,7 +28,13 @@ async def menu_callback_handler(
   tg_user = cb_query.from_user
 
   keyboard = get_menu_keyboard()
-  await cb_query.message.edit_reply_markup(
+  text = markdown.text(
+    "Это типо меню",
+    "Выберите действие",
+    sep="\n",
+  )
+  await cb_query.message.edit_text(
+    text=text,
     reply_markup=keyboard,
   )
 
