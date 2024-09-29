@@ -18,6 +18,7 @@ from src.models.user_model import UserModel
 from src.models.user_search_link_model import UserSearchLinkModel
 from src.models.search_link_model import SearchLinkModel
 from src.models.parsing_result_model import ParsingResultModel
+from src.models.user_telegram_model import UserTelegramModel
 from .user_types import UserSummary
 
 logger = Logger().get_instance()
@@ -57,7 +58,21 @@ class UserService(BaseService):
     user = await self.session.scalar(stmt)
 
     return user
-  
+
+  async def get_one_by_telegram_id(
+    self,
+    telegram_id: int,
+  ) -> UserModel | None:
+    stmt = (
+      select(UserModel)
+      .join(UserModel.telegram)
+      .where(UserTelegramModel.telegram_id == telegram_id)
+    )
+
+    user = await self.session.scalar(stmt)
+
+    return user
+
   async def delete_one(
     self,
     id: UUID,
