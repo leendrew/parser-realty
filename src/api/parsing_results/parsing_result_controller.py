@@ -45,8 +45,8 @@ async def get_parsing_results(
   # logger.info(f"Создаю задачи")
   # all = []
   # for link in links:
-  #   task = parsing_service.dispatcher(source=link.source_name, link=link.search_link)
-  #   task2 = parsing_service.dispatcher(source=link.source_name, link=link.search_link)
+  #   task = parsing_service.dispatcher(source=link.source_name_enum, link=link.search_link)
+  #   task2 = parsing_service.dispatcher(source=link.source_name_enum, link=link.search_link)
   #   all.append(task)
   #   all.append(task2)
   # res = await gather(*all)
