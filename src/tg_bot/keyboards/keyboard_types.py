@@ -1,8 +1,5 @@
 from enum import Enum
 
-class KeyboardShowMenuKey(Enum):
-  home = "home"
-
 class KeyboardMenuKey(Enum):
   home = "home"
   back = "back"

@@ -13,6 +13,18 @@ from src.models.search_link_model import SearchLinkModel
 
 logger = Logger().get_instance()
 
+def get_menu_init_keyboard() -> InlineKeyboardMarkup:
+  builder = InlineKeyboardBuilder()
+  builder.button(
+    text="Меню",
+    callback_data=MenuCallbackData(
+      action=KeyboardMenuKey.home,
+    ).pack(),
+  )
+  builder.adjust(1)
+
+  return builder.as_markup()
+
 def get_menu_keyboard() -> InlineKeyboardMarkup:
   builder = InlineKeyboardBuilder()
   builder.button(
