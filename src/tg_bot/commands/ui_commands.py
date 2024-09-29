@@ -11,11 +11,11 @@ ui_commands = [
     description="Информация",
   ),
   BotCommand(
-    command=CommandKey.stop.value,
-    description="Стоп",
-  ),
-  BotCommand(
     command=CommandKey.menu.value,
     description="Меню",
+  ),
+  BotCommand(
+    command=CommandKey.stop.value,
+    description="Стоп",
   ),
 ]
