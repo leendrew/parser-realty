@@ -48,16 +48,17 @@ def get_menu_keyboard() -> InlineKeyboardMarkup:
 
 def get_my_links_keyboard(links: list[SearchLinkModel]) -> InlineKeyboardMarkup:
   builder = InlineKeyboardBuilder()
-  for index, link in enumerate(links):
-    name = link.name or f"Ссылка {index}"
+  for link in links:
+    link_name = link.name
     is_active = "Активна" if link.is_active else "Неактивна"
-    text = f"{name} | {is_active}"
+    text = f"{link_name} | {is_active}"
     builder.button(
       text=text,
       callback_data=MyLinkCallbackData(
         action=KeyboardMyLinkKey.home,
         id=link.id,
-        name=link.name,
+        search_type=link.search_type,
+        name=link_name,
         source_name=link.source_name,
         is_active=link.is_active,
       ).pack(),

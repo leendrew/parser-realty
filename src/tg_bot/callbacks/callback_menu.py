@@ -13,7 +13,6 @@ from ..keyboards.keyboard_menu import (
   get_add_link_keyboard,
 )
 from src.api.users_telegrams.user_telegram_service import UserTelegramService
-from src.api.users.user_service import UserService
 from src.api.search_links.search_link_service import SearchLinkService
 
 logger = Logger().get_instance()
