@@ -3,7 +3,10 @@ from aiogram.filters import CommandStart
 from aiogram.utils import markdown
 from aiogram.types import Message
 from src.shared import Logger
-from ..keyboards.keyboard_menu import get_menu_keyboard
+from ..keyboards.keyboard_menu import (
+  get_menu_keyboard,
+  get_no_links_keyboard,
+)
 from src.api.users_telegrams.user_telegram_service import UserTelegramService
 from src.api.users.user_service import UserService
 
@@ -39,7 +42,7 @@ async def on_command_start_handler(
     user_id=user.id,
   )
 
-  keyboard = get_menu_keyboard()
+  keyboard = get_no_links_keyboard()
   text = markdown.text(
     f"Привет, {tg_user.full_name}.",
     "Вы добавлены в сервис",

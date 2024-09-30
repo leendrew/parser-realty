@@ -13,7 +13,7 @@ router = Router()
 @router.message(Command(CommandKey.menu.value))
 async def on_command_menu_handler(message: Message) -> None:
   keyboard = get_menu_keyboard()
-  # TODO: text
+  # TODO: menu text
   text = markdown.text(
     "Выберите действие",
     sep="\n",

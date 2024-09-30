@@ -67,6 +67,7 @@ async def on_stop_reject_callback_handler(cb_query: CallbackQuery) -> None:
   await cb_query.answer()
 
   keyboard = get_menu_keyboard()
+  # TODO: menu text
   text = markdown.text(
     "Действие отменено",
     sep="\n",
