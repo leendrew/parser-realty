@@ -35,6 +35,7 @@ class MyLinkCallbackPayload(BaseModel):
   search_type: SearchType | None = None
   name: str | None = None
   source_name: SourceName | None = None
+  search_link: str | None = None
   is_active: bool | None = None
 
 class MyLinkCallbackData(
