@@ -4,7 +4,7 @@ from aiogram.utils import markdown
 from aiogram.types import Message
 from src.shared import Logger
 from .command_types import CommandKey
-from ..keyboards.keyboard_menu import get_menu_init_keyboard
+from ..keyboards.keyboard_menu import get_menu_keyboard
 
 logger = Logger().get_instance()
 
@@ -14,7 +14,7 @@ router = Router()
 async def on_command_help_handler(
   message: Message,
 ) -> None:
-  keyboard = get_menu_init_keyboard()
+  keyboard = get_menu_keyboard()
   text = markdown.text(
     # TODO: добавить описание
     "Это бот, just a bot.",

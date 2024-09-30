@@ -19,7 +19,7 @@ from ..keyboards.keyboard_add_link import (
   get_add_link_source_keyboard,
   get_add_link_process_keyboard,
 )
-from ..keyboards.keyboard_menu import get_menu_init_keyboard
+from ..keyboards.keyboard_menu import get_menu_keyboard
 from src.api.users.user_service import UserService
 from src.api.search_links.search_link_service import SearchLinkService
 from src.api.search_links.search_link_types import source_name_title_map
@@ -205,7 +205,7 @@ async def on_add_link_search_link_correct_handler(
   )
   await state.clear()
 
-  keyboard = get_menu_init_keyboard()
+  keyboard = get_menu_keyboard()
   text = markdown.text(
     f"Ссылка с названием {created_search_link.name} создана!",
     sep="\n",
@@ -237,7 +237,7 @@ async def on_add_link_reset_handler(
   await cb_query.answer()
   await state.clear()
 
-  keyboard = get_menu_init_keyboard()
+  keyboard = get_menu_keyboard()
   text = markdown.text(
     "Прогресс добавления ссылки сброшен",
     sep="\n",

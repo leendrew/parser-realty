@@ -22,10 +22,9 @@ async def on_command_stop_handler(
   if not telegram_user:
     text = markdown.text(
       "Ошибка! Вас нет в сервисе",
-      "Для начала введите " + markdown.hbold(f"\/{CommandKey.start.value}"),
+      "Для начала введите " + markdown.hbold("/" + CommandKey.start.value),
       sep="\n",
     )
-
     await message.answer(
       text=text,
     )
@@ -37,7 +36,6 @@ async def on_command_stop_handler(
     "Их нельзя будет восстановить",
     sep="\n",
   )
-
   await message.answer(
     text=text,
     reply_markup=keyboard,

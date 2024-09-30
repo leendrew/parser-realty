@@ -10,7 +10,8 @@ from ..keyboards.keyboard_types import KeyboardMenuKey
 from ..keyboards.keyboard_menu import (
   get_menu_keyboard,
   get_my_links_keyboard,
-  get_add_link_keyboard,
+  get_no_links_keyboard,
+  get_add_link_search_type_keyboard,
 )
 from src.api.users_telegrams.user_telegram_service import UserTelegramService
 from src.api.search_links.search_link_service import SearchLinkService
@@ -45,10 +46,21 @@ async def on_menu_my_links_handler(
 
   telegram_user = await user_telegram_service.get_one(telegram_id=tg_user.id)
   links = await search_link_service.get_all_by(user_id=telegram_user.user_id)
+  if not links:
+    keyboard = get_no_links_keyboard()
+    text = markdown.text(
+      "У вас еще нет ссылок",
+      sep="\n",
+    )
+    await cb_query.message.edit_text(
+      text=text,
+      reply_markup=keyboard,
+    )
+    return
 
   keyboard = get_my_links_keyboard(links=links)
   text = markdown.text(
-    "Вот ваши ссылки",
+    "Ваши ссылки",
     sep="\n",
   )
   await cb_query.message.edit_text(
@@ -57,14 +69,12 @@ async def on_menu_my_links_handler(
   )
 
 @router.callback_query(MenuCallbackData.filter(F.action == KeyboardMenuKey.add_link))
-async def on_menu_add_link_handler(
-  cb_query: CallbackQuery,
-) -> None:
+async def on_menu_add_link_handler(cb_query: CallbackQuery) -> None:
   await cb_query.answer()
 
-  keyboard = get_add_link_keyboard()
+  keyboard = get_add_link_search_type_keyboard()
   text = markdown.text(
-    "Выбери что-то",
+    "Выберите, что вы ищете",
     sep="\n",
   )
   await cb_query.message.edit_text(

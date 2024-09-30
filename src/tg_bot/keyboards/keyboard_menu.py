@@ -16,18 +16,6 @@ from src.api.search_links.search_link_types import (
   search_type_title_map,
 )
 
-def get_menu_init_keyboard() -> InlineKeyboardMarkup:
-  builder = InlineKeyboardBuilder()
-  builder.button(
-    text="Меню",
-    callback_data=MenuCallbackData(
-      action=KeyboardMenuKey.home,
-    ).pack(),
-  )
-  builder.adjust(1)
-
-  return builder.as_markup()
-
 def get_menu_keyboard() -> InlineKeyboardMarkup:
   builder = InlineKeyboardBuilder()
   builder.button(
@@ -48,6 +36,7 @@ def get_menu_keyboard() -> InlineKeyboardMarkup:
 
 def get_my_links_keyboard(links: list[SearchLinkModel]) -> InlineKeyboardMarkup:
   builder = InlineKeyboardBuilder()
+
   for link in links:
     link_name = link.name
     is_active = "Активна" if link.is_active else "Неактивна"
@@ -63,6 +52,7 @@ def get_my_links_keyboard(links: list[SearchLinkModel]) -> InlineKeyboardMarkup:
         is_active=link.is_active,
       ).pack(),
     )
+
   builder.button(
     text="Назад",
     callback_data=MenuCallbackData(
@@ -73,7 +63,21 @@ def get_my_links_keyboard(links: list[SearchLinkModel]) -> InlineKeyboardMarkup:
 
   return builder.as_markup()
 
-def get_add_link_keyboard():
+def get_no_links_keyboard() -> InlineKeyboardMarkup:
+  builder = InlineKeyboardBuilder()
+
+  builder.button(
+    text="Добавить ссылку",
+    callback_data=MenuCallbackData(
+      action=KeyboardMenuKey.add_link,
+    ).pack(),
+  )
+
+  builder.adjust(1)
+
+  return builder.as_markup()
+
+def get_add_link_search_type_keyboard():
   builder = InlineKeyboardBuilder()
 
   for search_type in SearchType:
