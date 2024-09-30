@@ -120,7 +120,7 @@ class SearchLinkService(BaseService):
     self,
     id: int,
     is_active: bool,
-  ) -> SearchLinkModel:
+  ) -> SearchLinkModel | None:
     stmt = (
       update(SearchLinkModel)
       .where(SearchLinkModel.id == id)
@@ -130,12 +130,12 @@ class SearchLinkService(BaseService):
 
     try:
       model = await self.session.scalar(stmt)
+      await self.session.commit()
 
       return model
 
     except Exception:
       await self.session.rollback()
-
       message = "Ошибка при обновлении ссылки"
       logger.exception(f"{message} с id \"{id}\"")
       raise Exception(message)
