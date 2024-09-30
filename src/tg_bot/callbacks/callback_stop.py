@@ -62,7 +62,7 @@ async def stop_callback_handler(
       reply_markup=keyboard,
     )
 
-@router.callback_query(StopCallbackData.filter(F.action == KeyboardStopKey.confirm))
+@router.callback_query(StopCallbackData.filter(F.action == KeyboardStopKey.reject))
 async def on_stop_reject_callback_handler(cb_query: CallbackQuery) -> None:
   await cb_query.answer()
 
