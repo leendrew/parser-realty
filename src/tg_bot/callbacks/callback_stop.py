@@ -17,7 +17,7 @@ logger = Logger().get_instance()
 router = Router()
 
 @router.callback_query(StopCallbackData.filter(F.action == KeyboardStopKey.confirm))
-async def stop_callback_handler(
+async def on_stop_confirm_callback_handler(
   cb_query: CallbackQuery,
   callback_data: StopCallbackData,
   user_service: UserService,

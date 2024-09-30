@@ -36,7 +36,7 @@ async def on_menu_home_callback_handler(cb_query: CallbackQuery) -> None:
   )
 
 @router.callback_query(MenuCallbackData.filter(F.action == KeyboardMenuKey.my_links))
-async def on_menu_my_links_handler(
+async def on_menu_my_links_callback_handler(
   cb_query: CallbackQuery,
   user_telegram_service: UserTelegramService,
   search_link_service: SearchLinkService,
@@ -69,7 +69,7 @@ async def on_menu_my_links_handler(
   )
 
 @router.callback_query(MenuCallbackData.filter(F.action == KeyboardMenuKey.add_link))
-async def on_menu_add_link_handler(cb_query: CallbackQuery) -> None:
+async def on_menu_add_link_callback_handler(cb_query: CallbackQuery) -> None:
   await cb_query.answer()
 
   keyboard = get_add_link_search_type_keyboard()

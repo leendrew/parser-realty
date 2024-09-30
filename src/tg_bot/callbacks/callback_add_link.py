@@ -7,19 +7,17 @@ from aiogram.types import (
   CallbackQuery,
   Message,
 )
-from aiogram.fsm.state import (
-  StatesGroup,
-  State,
-)
 from aiogram.fsm.context import FSMContext
 from src.shared import Logger
 from .callback_types import AddLinkCallbackData
+from .callback_states import AddLinkState
 from ..keyboards.keyboard_types import KeyboardAddLinkKey
 from ..keyboards.keyboard_add_link import (
   get_add_link_source_keyboard,
   get_add_link_process_keyboard,
 )
 from ..keyboards.keyboard_menu import get_menu_keyboard
+from ..utils import remove_last_bot_message_reply_markup
 from src.api.users.user_service import UserService
 from src.api.search_links.search_link_service import SearchLinkService
 from src.api.search_links.search_link_types import source_name_title_map
@@ -29,26 +27,8 @@ logger = Logger().get_instance()
 
 router = Router()
 
-class AddLinkState(StatesGroup):
-  last_bot_message_id = State()
-  search_type = State()
-  source_name = State()
-  name = State()
-  search_link = State()
-
-async def remove_last_bot_message_reply_markup(
-  message: Message,
-  state: FSMContext,
-) -> None:
-  data = await state.get_data()
-  await message.bot.edit_message_reply_markup(
-    chat_id=message.chat.id,
-    message_id=data["last_bot_message_id"],
-    reply_markup=None,
-  )
-
 @router.callback_query(AddLinkCallbackData.filter(F.action == KeyboardAddLinkKey.home))
-async def on_add_link_source_name_handler(
+async def on_add_link_source_name_callback_handler(
   cb_query: CallbackQuery,
   callback_data: AddLinkCallbackData,
   state: FSMContext,
@@ -97,7 +77,7 @@ async def on_add_link_name_callback_handler(
   AddLinkState.name,
   F.text,
 )
-async def on_add_link_name_correct_handler(
+async def on_add_link_name_correct_callback_handler(
   message: Message,
   state: FSMContext,
 ) -> None:
@@ -126,7 +106,7 @@ async def on_add_link_name_correct_handler(
   await state.update_data(last_bot_message_id=sended_message.message_id)
 
 @router.message(AddLinkState.name)
-async def on_add_link_name_incorrect_handler(message: Message) -> None:
+async def on_add_link_name_incorrect_callback_handler(message: Message) -> None:
   text = markdown.text(
     "Ошибка! Я просил ввести текст",
     "Попробуйте еще раз",
@@ -140,7 +120,7 @@ async def on_add_link_name_incorrect_handler(message: Message) -> None:
   AddLinkState.search_link,
   F.text,
 )
-async def on_add_link_search_link_correct_handler(
+async def on_add_link_search_link_correct_callback_handler(
   message: Message,
   state: FSMContext,
   user_service: UserService,
@@ -216,7 +196,7 @@ async def on_add_link_search_link_correct_handler(
   )
 
 @router.message(AddLinkState.search_link)
-async def on_add_link_search_link_incorrect_handler(message: Message) -> None:
+async def on_add_link_search_link_incorrect_callback_handler(message: Message) -> None:
   text = markdown.text(
     "Ошибка! Это не ссылка",
     "Попробуйте еще раз",
@@ -230,7 +210,7 @@ async def on_add_link_search_link_incorrect_handler(message: Message) -> None:
   AddLinkCallbackData.filter(F.action == KeyboardAddLinkKey.reset),
   AddLinkState(),
 )
-async def on_add_link_reset_handler(
+async def on_add_link_reset_callback_handler(
   cb_query: CallbackQuery,
   state: FSMContext,
 ) -> None:
