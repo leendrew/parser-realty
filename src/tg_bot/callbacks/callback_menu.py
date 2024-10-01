@@ -99,7 +99,6 @@ async def on_menu_add_link_callback_handler(
   keyboard = get_add_link_search_type_keyboard()
   text = markdown.text(
     "Выберите, что вы ищете",
-    "Уведомления о новых результатах будут приходить:",
     *search_types_intervals_text,
     sep="\n",
   )
