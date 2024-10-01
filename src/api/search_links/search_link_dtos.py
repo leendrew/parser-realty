@@ -16,6 +16,7 @@ from .search_link_types import (
 
 class CreateOnePayloadDto(BaseModel):
   search_type: SearchType
+  name: str
   link: str
   source_name: SourceName
   user_id: UUID
