@@ -41,11 +41,8 @@ class SearchLinkService(BaseService):
       logger.error(f"{message} у ссылки \"{link}\"")
       raise ValueError(message)
 
-    is_valid_source_link = LinkValidator.is_valid_source(
-      source=source_name,
-      link=link
-    )
-    if not is_valid_source_link:
+    link_source = LinkValidator.get_link_source(link=link)
+    if not link_source:
       logger.error(f"Ссылки с сайта \"{source_name.value}\" не поддерживаются")
       raise ValueError("Ссылки данного сайте не поддерживаются")
     

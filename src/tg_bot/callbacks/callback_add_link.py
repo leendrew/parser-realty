@@ -143,11 +143,8 @@ async def on_add_link_search_link_correct_callback_handler(
     )
     return
 
-  is_link_has_valid_source = LinkValidator.is_valid_source(
-    link=link,
-    source=data["source_name"],
-  )
-  if not is_link_has_valid_source:
+  link_source = LinkValidator.get_link_source(link=link)
+  if not link_source:
     source_name = data["source_name"]
     source_name_title = source_name_title_map[source_name]
     text = markdown.text(

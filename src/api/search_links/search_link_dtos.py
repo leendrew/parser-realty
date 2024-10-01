@@ -26,11 +26,8 @@ class CreateOnePayloadDto(BaseModel):
     if not is_link_https:
       raise ValueError("Невалидный протокол")
 
-    is_valid_source_link = LinkValidator.is_valid_source(
-      source=self.source_name,
-      link=self.link,
-    )
-    if not is_valid_source_link:
+    link_source = LinkValidator.get_link_source(link=self.link)
+    if not link_source:
       raise ValueError("Ссылки данного сайта не поддерживаются")
 
     return self
