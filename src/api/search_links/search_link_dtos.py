@@ -29,7 +29,7 @@ class CreateOnePayloadDto(BaseModel):
 
     link_source = LinkValidator.get_link_source(link=self.link)
     if not link_source:
-      raise ValueError("Ссылки данного сайта не поддерживаются")
+      raise ValueError("Ссылки с данного сайта не поддерживаются")
 
     return self
 

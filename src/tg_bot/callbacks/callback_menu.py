@@ -13,6 +13,7 @@ from ..keyboards.keyboard_menu import (
   get_no_links_keyboard,
   get_add_link_search_type_keyboard,
 )
+from ..shared import search_types_intervals_text
 from src.api.users_telegrams.user_telegram_service import UserTelegramService
 from src.api.search_links.search_link_service import SearchLinkService
 
@@ -75,6 +76,8 @@ async def on_menu_add_link_callback_handler(cb_query: CallbackQuery) -> None:
   keyboard = get_add_link_search_type_keyboard()
   text = markdown.text(
     "Выберите, что вы ищете",
+    "Уведомления о новых результатах будут приходить:",
+    *search_types_intervals_text,
     sep="\n",
   )
   await cb_query.message.edit_text(

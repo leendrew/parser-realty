@@ -43,8 +43,9 @@ class SearchLinkService(BaseService):
 
     link_source = LinkValidator.get_link_source(link=link)
     if not link_source:
-      logger.error(f"Ссылки с сайта \"{source_name.value}\" не поддерживаются")
-      raise ValueError("Ссылки данного сайте не поддерживаются")
+      message = "Ссылки c данного сайта не поддерживаются"
+      logger.error(f"{message}. {link}")
+      raise ValueError(message)
     
     stmt = (
       select(func.count())
