@@ -77,6 +77,18 @@ def get_no_links_keyboard() -> InlineKeyboardMarkup:
 
   return builder.as_markup()
 
+def get_max_links_keyboard() -> InlineKeyboardBuilder:
+  builder = InlineKeyboardBuilder()
+  builder.button(
+    text="Мои ссылки",
+    callback_data=MenuCallbackData(
+      action=KeyboardMenuKey.my_links,
+    ).pack(),
+  )
+  builder.adjust(1)
+
+  return builder.as_markup()
+
 def get_add_link_search_type_keyboard():
   builder = InlineKeyboardBuilder()
 

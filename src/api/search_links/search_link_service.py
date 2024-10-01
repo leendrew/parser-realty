@@ -46,14 +46,8 @@ class SearchLinkService(BaseService):
       message = "Ссылки c данного сайта не поддерживаются"
       logger.error(f"{message}. {link}")
       raise ValueError(message)
-    
-    stmt = (
-      select(func.count())
-      .join(SearchLinkModel.users)
-      .where(UserModel.id == user.id)
-    )
 
-    user_search_links_count = await self.session.scalar(stmt)
+    user_search_links_count = await self.get_user_links_count(user_id=user.id)
     if user_search_links_count >= MAX_USER_LINKS_COUNT:
       message = "Превышено допустимое количество ссылок"
       logger.error(f"{message} для пользователя с id \"{user.id}\"")
@@ -113,6 +107,20 @@ class SearchLinkService(BaseService):
     links = await self.session.scalars(stmt)
 
     return links.all()
+
+  async def get_user_links_count(
+    self,
+    user_id: UUID,
+  ) -> int:
+    stmt = (
+      select(func.count())
+      .join(SearchLinkModel.users)
+      .where(UserModel.id == user_id)
+    )
+
+    result = await self.session.scalar(stmt)
+
+    return result
 
   async def edit_one(
     self,
