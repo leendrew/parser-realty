@@ -8,10 +8,6 @@ from ..callbacks.callback_types import (
   AddLinkCallbackData,
   MenuCallbackData,
 )
-from src.api.search_links.search_link_types import (
-  SourceName,
-  source_name_title_map,
-)
 
 def get_add_link_init_keyboard() -> InlineKeyboardMarkup:
   builder = InlineKeyboardBuilder()

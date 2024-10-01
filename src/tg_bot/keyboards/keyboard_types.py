@@ -8,7 +8,6 @@ class KeyboardMenuKey(Enum):
 
 class KeyboardAddLinkKey(Enum):
   home = "home"
-  name = "name"
   reset = "reset"
 
 class KeyboardMyLinkKey(Enum):
