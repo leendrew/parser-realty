@@ -65,7 +65,7 @@ async def on_menu_my_links_callback_handler(
 
   keyboard = get_my_links_keyboard(links=links)
   text = markdown.text(
-    "Ваши ссылки",
+    "Список ваших ссылок:",
     sep="\n",
   )
   await cb_query.message.edit_text(
@@ -88,6 +88,7 @@ async def on_menu_add_link_callback_handler(
     keyboard = get_max_links_keyboard()
     text = markdown.text(
       "Превышено допустимое количество ссылок",
+      "Удалите одну из существующих",
       sep="\n",
     )
     await cb_query.message.edit_text(

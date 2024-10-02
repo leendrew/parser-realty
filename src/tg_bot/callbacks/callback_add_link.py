@@ -65,7 +65,7 @@ async def on_add_link_name_correct_callback_handler(
   keyboard = get_add_link_process_keyboard()
   text = markdown.text(
     "Выберите максимально строгие фильтры",
-    "Если результатов больше, чем на одну страницу, то поставьте сортировку по дате (сначала новые)",
+    "Поставьте сортировку по дате (сначала новые)",
     *supported_sources_text,
     sep="\n",
   )
