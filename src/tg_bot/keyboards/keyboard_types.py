@@ -16,6 +16,8 @@ class KeyboardMyLinkKey(Enum):
   edit_name = "edit_name"
   toggle_active = "toggle_active"
   delete_link = "delete_link"
+  delete_link_confirm = "delete_link_confirm"
+  reset = "reset"
 
 class KeyboardStopKey(Enum):
   home = "home"
