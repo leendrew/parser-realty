@@ -46,7 +46,11 @@ class SearchLinkModel(BaseModel):
 
   @property
   def search_type_enum(self) -> SearchType:
-    return SearchType[self.search_type]
+    for _, enum_value in SearchType.__members__.items():
+      if enum_value.value == self.search_type:
+        return enum_value
+
+    raise ValueError()
 
   search_link: Mapped[str] = mapped_column(
     Text,
