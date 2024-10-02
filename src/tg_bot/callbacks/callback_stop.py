@@ -52,6 +52,7 @@ async def on_stop_confirm_callback_handler(
     )
 
   except Exception:
+    logger.exception("Delete User")
     keyboard = get_stop_keyboard(user_id=callback_data.user_id)
     text = markdown.text(
       "Произошла ошибка, попробуйте снова",

@@ -11,6 +11,7 @@ class AddLinkState(StatesGroup):
 
 class MyLinkState(StatesGroup):
   last_bot_message_id = State()
+  id = State()
   search_type = State()
   name = State()
   search_link = State()

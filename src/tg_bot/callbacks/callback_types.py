@@ -1,6 +1,8 @@
-from typing import Any
 from uuid import UUID
-from pydantic import BaseModel
+from pydantic import (
+  BaseModel,
+  ConfigDict,
+)
 from aiogram.filters.callback_data import CallbackData
 from ..keyboards.keyboard_types import (
   KeyboardMenuKey,
@@ -31,11 +33,12 @@ class AddLinkCallbackData(
   action: KeyboardAddLinkKey
 
 class MyLinkCallbackPayload(BaseModel):
+  model_config = ConfigDict(from_attributes=True)
+
   id: int | None = None
   search_type: SearchType | None = None
   name: str | None = None
   source_name: SourceName | None = None
-  search_link: str | None = None
   is_active: bool | None = None
 
 class MyLinkCallbackData(
