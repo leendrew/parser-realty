@@ -61,12 +61,19 @@ async def create_one(
 #   id: int,
 #   payload: EditOnePayloadDto,
 # ):
-#   result = await search_link_service.edit_one(
-#     id=id,
-#     is_active=payload.is_active,
-#   )
+#   try:
+#     result = await search_link_service.edit_one(
+#       id=id,
+#       name=payload.name,
+#       search_type=payload.search_type,
+#       search_link=payload.search_link,
+#       is_active=payload.is_active,
+#     )
 
-#   return result
+#     return result
+  
+#   except Exception:
+#     return {}
 
 # @router.delete("/{id}")
 # async def delete_one(

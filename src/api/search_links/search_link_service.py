@@ -125,12 +125,38 @@ class SearchLinkService(BaseService):
   async def edit_one(
     self,
     id: int,
-    is_active: bool,
+    search_type: SearchType | None,
+    name: str | None,
+    search_link: str | None,
+    is_active: bool | None,
   ) -> SearchLinkModel | None:
+    update_map = {}
+    if search_type:
+      update_map["search_type"] = search_type.value
+    if name:
+      update_map["name"] = name
+    if search_link:
+      is_link_https = LinkValidator.is_valid_https(search_link)
+      if not is_link_https:
+        message = "Невалидный протокол"
+        logger.error(f"{message} у ссылки \"{search_link}\"")
+        raise ValueError(message)
+
+      link_source = LinkValidator.get_link_source(link=search_link)
+      if not link_source:
+        message = "Ссылки c данного сайта не поддерживаются"
+        logger.error(f"{message}. {search_link}")
+        raise ValueError(message)
+
+      update_map["search_link"] = search_link
+      update_map["source_name"] = link_source.value
+    if is_active:
+      update_map["is_active"] = is_active
+
     stmt = (
       update(SearchLinkModel)
       .where(SearchLinkModel.id == id)
-      .values(is_active=is_active)
+      .values(**update_map)
       .returning(SearchLinkModel)
     )
 

@@ -43,4 +43,7 @@ class GetAllByQueryDto(BaseModel):
 GetAllByQueryDtoDependency = Annotated[GetAllByQueryDto, Depends()]
 
 class EditOnePayloadDto(BaseModel):
-  is_active: bool
+  search_type: SearchType | None = None
+  name: str | None = None
+  search_link: str | None = None
+  is_active: bool | None = None
