@@ -1,6 +1,7 @@
 *.pyc
 .dockerignore
 .vscode
+.github
 .idea
 .git
 .git*
