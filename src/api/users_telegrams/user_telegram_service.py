@@ -100,12 +100,6 @@ class UserTelegramService(BaseService):
     try:
       from src.tg_bot.bot import tg_bot
 
-      texts = []
-      for index, parsing_result in enumerate(parsing_results):
-        number = index + 1
-        text = get_my_link_parsing_result_message()
-        texts.append(text)
-
       title_text = f"Ваш результат для ссылки \"{link_name}\":"
       texts = get_my_link_parsing_result_message(parsing_results=parsing_results)
 

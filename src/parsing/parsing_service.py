@@ -79,7 +79,7 @@ class ParsingService:
           task = user_telegram_service.notify_telegram_user(
             user_telegram_id=telegram_user.telegram_id,
             link_name=user_search_link.search_link.name,
-            parsing_result=new_results,
+            parsing_results=new_results,
           )
           notify_telegram_users_tasks.append(task)
 
