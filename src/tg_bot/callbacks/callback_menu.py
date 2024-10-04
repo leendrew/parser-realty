@@ -14,16 +14,41 @@ from ..keyboards.keyboard_menu import (
   get_max_links_keyboard,
   get_add_link_search_type_keyboard,
 )
-from ..shared import search_types_intervals_text
 from src.api.users_telegrams.user_telegram_service import UserTelegramService
 from src.api.search_links.search_link_service import (
   SearchLinkService,
   MAX_USER_LINKS_COUNT,
 )
+from src.api.search_links.search_link_types import (
+  SearchType,
+  search_type_title_map,
+)
+
 
 logger = Logger().get_instance()
 
 router = Router()
+
+# ! FIX: extracting this cause cycle import
+interval_text_map = {
+  SearchType.rent: "каждые 30 минут",
+  SearchType.purchase: "каждый день",
+}
+
+def __get_search_types_intervals_text() -> list[str]:
+  title_text = "Уведомления о новых результатах будут приходить:",
+  search_types_intervals = []
+  search_types_intervals.append(title_text)
+
+  for search_type in SearchType:
+    title = search_type_title_map[search_type]
+    interval_text = interval_text_map[search_type]
+    text = f"– {title} - {interval_text}"
+    search_types_intervals.append(text)
+
+  return search_types_intervals
+
+search_types_intervals_text = __get_search_types_intervals_text()
 
 @router.callback_query(MenuCallbackData.filter(F.action == KeyboardMenuKey.home))
 async def on_menu_home_callback_handler(cb_query: CallbackQuery) -> None:
