@@ -23,17 +23,17 @@ def get_my_link_parsing_result_message(parsing_results: list[ParsingResultModel]
 
   texts = []
   for index, parsing_result in enumerate(parsing_results):
-    number = str(index + 1)
+    number_text = str(index + 1)
     deposit_percent = parsing_result.deposit_percent
     commission_percent = parsing_result.commission_percent
 
     price_text = f"Цена – {parsing_result.price}"
-    deposit_value_text = deposit_percent if deposit_percent is not None else no_value_text
+    deposit_value_text = f"{deposit_percent}%" if deposit_percent is not None else no_value_text
     deposit_text = f"Залог – {deposit_value_text}"
-    commission_value_text = commission_percent if commission_percent is not None else no_value_text
+    commission_value_text = f"{commission_percent}%" if commission_percent is not None else no_value_text
     commission_text = f"Комиссия – {commission_value_text}"
 
-    values_text = ". ".join([number, price_text, deposit_text, commission_text])
+    values_text = ". ".join([number_text, price_text, deposit_text, commission_text])
     link_text = f"Ссылка – {parsing_result.direct_link}"
     texts.append(values_text)
     texts.append(link_text)
@@ -100,7 +100,7 @@ class UserTelegramService(BaseService):
     try:
       from src.tg_bot.bot import tg_bot
 
-      title_text = f"Ваш результат для ссылки \"{link_name}\":"
+      title_text = f"Новые результаты для \"{link_name}\":"
       texts = get_my_link_parsing_result_message(parsing_results=parsing_results)
 
       text = markdown.text(

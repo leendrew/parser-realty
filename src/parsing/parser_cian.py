@@ -39,7 +39,7 @@ class ParserCian(ParserBase):
         item_link = item_content_container.find(name="a")
         direct_link = item_link.get("href")
 
-        item_price_container = item_content_container.find(attrs={"data-mark": "PriceLayout"})
+        item_price_container = item_content_container.find(attrs={"data-name": "PriceLayout"})
         price_raw = item_price_container.text
         price_matches = re.findall(pattern=price_regex, string=price_raw)
         price = int("".join(price_matches))
