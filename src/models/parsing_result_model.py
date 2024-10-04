@@ -1,16 +1,9 @@
-from typing import (
-  Optional,
-  TYPE_CHECKING,
-)
-from datetime import datetime
+from typing import TYPE_CHECKING
 from sqlalchemy import (
   ForeignKey,
   BigInteger,
   SmallInteger,
   Text,
-  String,
-  DateTime,
-  func,
 )
 from sqlalchemy.orm import (
   mapped_column,
@@ -20,7 +13,6 @@ from sqlalchemy.orm import (
 from .base_model import BaseModel
 if TYPE_CHECKING:
   from .user_search_link_model import UserSearchLinkModel
-  from .city_metro_station_model import CityMetroStationModel
 
 class ParsingResultModel(BaseModel):
   __tablename__ = "parsing_results"
@@ -43,27 +35,9 @@ class ParsingResultModel(BaseModel):
     back_populates="parsing_results",
   )
 
-  city_metro_station_id: Mapped[int | None] = mapped_column(
-    SmallInteger,
-    ForeignKey("cities_metro_stations.id"),
-    nullable=True,
-  )
-  # o2o
-  city_metro_station: Mapped[Optional["CityMetroStationModel"]] = relationship(
-    back_populates="parsing_result",
-  )
-
   direct_link: Mapped[str] = mapped_column(
     Text,
     index=True,
-  )
-
-  floor: Mapped[str] = mapped_column(
-    String(5),
-  )
-
-  flat_area: Mapped[str] = mapped_column(
-    String(7),
   )
 
   price: Mapped[int] = mapped_column(
