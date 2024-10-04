@@ -62,4 +62,52 @@ class ParsingResultService(BaseService):
       logger.exception(message)
       raise Exception(message)
 
+  async def get_one(
+    self,
+    id: int | None = None,
+    direct_link: str | None = None,
+  ) -> ParsingResultModel | None:
+    stmt = (
+      select(ParsingResultModel)
+    )
+
+    filters = []
+    if id is not None:
+      filters.append(ParsingResultModel.id == id)
+    if direct_link is not None:
+      filters.append(ParsingResultModel.direct_link == direct_link)
+
+    stmt = stmt.filter(*filters)
+
+    parsing_result = await self.session.scalar(stmt)
+
+    return parsing_result
+
+  async def create_unique(
+    self,
+    payload: list[ParsingResult],
+    user_search_link: UserSearchLinkModel,
+  ) -> list[ParsingResultModel]:
+    new_parsing_results = []
+    for candidate in payload:
+      is_exist = await self.get_one(direct_link=candidate.direct_link)
+      if is_exist is None:
+        new_parsing_results.append(candidate)
+
+    if not new_parsing_results:
+      return []
+
+    try:
+      result = await self.create_many(
+        payload=new_parsing_results,
+        user_search_link=user_search_link,
+      )
+
+      return result
+
+    except Exception:
+      logger.exception("Create Unique")
+
+      return []
+
 ParsingResultServiceDependency = Annotated[ParsingResultService, Depends()]
