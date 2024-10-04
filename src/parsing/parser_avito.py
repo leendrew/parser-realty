@@ -6,9 +6,7 @@ from bs4 import (
 )
 from src.shared import Logger
 from .parser_base import ParserBase
-from src.api.parsing_results.parsing_result_types import (
-  ParsingResult,
-)
+from src.api.parsing_results.parsing_result_types import ParsingResult
 from src.api.search_links.search_link_types import SourceName
 
 logger = Logger().get_instance()
@@ -22,21 +20,8 @@ class ParserAvito(ParserBase):
     body = soup.find(name="body")
 
     item_body_regex = re.compile(r"item-body")
-    title_flat_regex = re.compile(r"([^,]+),\s*(\d+(?:[.,]\d+)?).*,\s*([0-9/]+)")
-    title_house_regex = re.compile(r"()(\d+).+м²()")
     deposit_regex = re.compile(r"\d+")
     commission_percent_regex = re.compile(r"(\d+)")
-    item_metro_station_root_container_regex = re.compile(r"geo-root")
-    item_metro_station_icon_regex = re.compile(r"geo-icons")
-    # ¯\_(ツ)_/¯ source specific
-    metro_station_name_by_geo_map = {
-      "мурино": "Девяткино",
-      "площадь А. Невского I": "Площадь Александра Невского-1",
-      "площадь А. Невского II": "Площадь Александра Невского-2",
-      "технологический ин-т I": "Технологический институт-1",
-      "технологический ин-т I": "Технологический институт-1",
-      "технологический ин-т II": "Технологический институт-2",
-    }
 
     container = body.find(attrs={"data-marker": "catalog-serp"})
     if not container:
@@ -54,16 +39,6 @@ class ParserAvito(ParserBase):
         item_link = item_body.find(attrs={"itemprop": "url"})
         direct_link = "https://www.avito.ru" + item_link.get("href")
 
-        item_title = item_link.find(attrs={"itemprop": "name"})
-        title_content = item_title.text.lower()
-
-        title_match = re.search(pattern=title_flat_regex, string=title_content)
-        if not title_match:
-          title_match = re.search(pattern=title_house_regex, string=title_content)
-        type, flat_area, floor = title_match.groups()
-        if not floor:
-          floor = "1"
-
         item_price = item_body.find(attrs={"itemprop": "price"})
         price = int(item_price.get("content"))
 
@@ -75,7 +50,7 @@ class ParserAvito(ParserBase):
           arr = item_params_text.split("·")
           deposit_raw = arr[0]
           commission_raw = arr[1]
-          
+
           deposit_matches = re.findall(pattern=deposit_regex, string=deposit_raw)
           deposit = int("".join(deposit_matches))
           deposit_percent = 0
@@ -86,26 +61,11 @@ class ParserAvito(ParserBase):
           commission = commission_match and commission_match.group(1)
           commission_percent = commission and int(commission) or 0
 
-        metro_station_name = None
-        item_metro_station_root_container = item_body.find(class_=item_metro_station_root_container_regex)
-        if item_metro_station_root_container:
-          item_metro_station_name = item_metro_station_root_container.text.strip().lower()
-
-          if item_metro_station_name in metro_station_name_by_geo_map.keys():
-            metro_station_name = metro_station_name_by_geo_map[item_metro_station_name]
-          else:
-            item_metro_station_name = item_metro_station_root_container.find(class_=item_metro_station_icon_regex)
-            if item_metro_station_name:
-              metro_station_name = item_metro_station_name.next_sibling.text.strip()
-
         parsing_result = ParsingResult(
           direct_link=direct_link,
-          floor=floor,
-          flat_area=flat_area,
           price=price,
           commission_percent=commission_percent,
           deposit_percent=deposit_percent,
-          metro_station_name=metro_station_name,
         )
         result.append(parsing_result)
 
