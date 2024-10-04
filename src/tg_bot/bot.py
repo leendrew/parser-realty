@@ -4,7 +4,10 @@ from aiogram import (
 )
 from aiogram.client.default import DefaultBotProperties
 from aiogram.enums import ParseMode
-from aiogram.types import BotCommandScopeAllPrivateChats
+from aiogram.types import (
+  BotCommandScopeAllPrivateChats,
+  Message,
+)
 from src.shared import Logger
 from src.config import config
 from .middlewares.services_middleware import ServicesMiddleware
@@ -39,3 +42,10 @@ class Bot:
   async def stop(self) -> None:
     await dp.stop_polling(self.__instance)
     await self.__instance.session.close()
+
+  async def send_message(self, *args, **kwargs) -> Message:
+    result = await self.__instance.send_message(*args, **kwargs)
+
+    return result
+
+tg_bot = Bot()

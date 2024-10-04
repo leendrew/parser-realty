@@ -1,8 +1,7 @@
 from asyncio import run
-from .bot import Bot
+from .bot import tg_bot
 
 async def main():
-  tg_bot = Bot()
   await tg_bot.start()
 
 if __name__ == "__main__":
