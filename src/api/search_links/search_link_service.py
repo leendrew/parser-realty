@@ -10,6 +10,7 @@ from sqlalchemy import (
   delete,
   func,
 )
+from sqlalchemy.orm import joinedload
 from src.shared import (
   Logger,
   BaseService,
@@ -87,6 +88,7 @@ class SearchLinkService(BaseService):
     stmt = (
       select(SearchLinkModel)
       .join(SearchLinkModel.users)
+      .options(joinedload(SearchLinkModel.users))
     )
 
     filters = []
