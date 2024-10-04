@@ -23,7 +23,7 @@ def get_my_link_parsing_result_message(parsing_results: list[ParsingResultModel]
 
   texts = []
   for index, parsing_result in enumerate(parsing_results):
-    number = index + 1
+    number = str(index + 1)
     deposit_percent = parsing_result.deposit_percent
     commission_percent = parsing_result.commission_percent
 
