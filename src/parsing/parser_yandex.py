@@ -6,9 +6,7 @@ from bs4 import (
 )
 from src.shared import Logger
 from .parser_base import ParserBase
-from src.api.parsing_results.parsing_result_types import (
-  ParsingResult,
-)
+from src.api.parsing_results.parsing_result_types import ParsingResult
 from src.api.search_links.search_link_types import SourceName
 
 logger = Logger().get_instance()
@@ -21,10 +19,7 @@ class ParserYandex(ParserBase):
     soup = self.parser.with_lxml(markup=markup)
     body = soup.find(name="body")
 
-    flat_area_regex = re.compile(r"(\d+)")
-    floor_regex = re.compile(r"\d+")
     price_regex = re.compile(r"\d+")
-    metro_station_name_regex = re.compile(r"metrostation__title", re.IGNORECASE)
     tags_regex = re.compile(r"tagscontainer", re.IGNORECASE)
     commission_regex = re.compile(r"комиссия\s+(\d+)?", re.IGNORECASE)
     deposit_regex = re.compile(r"(залог)", re.IGNORECASE)
@@ -42,21 +37,6 @@ class ParserYandex(ParserBase):
       try:
         item_link = item.find(name="a")
         direct_link = "https://realty.ya.ru" + item_link.get("href")
-
-        title_text = item_link.text.strip()
-        flat_area_raw = ""
-        floor_raw = "1"
-        arr = title_text.split("·")
-        flat_area_raw = arr[0]
-        if len(arr) > 1:
-          floor_raw = arr[2]
-
-        flat_area_match = re.search(pattern=flat_area_regex, string=flat_area_raw)
-        flat_area = flat_area_match.group(1)
-
-        floor_matches = re.findall(pattern=floor_regex, string=floor_raw)
-        if floor_matches:
-          floor = "/".join(floor_matches)
 
         item_price = item.find(class_="Price")
         price_raw = item_price.text
@@ -77,19 +57,11 @@ class ParserYandex(ParserBase):
         if deposit_match:
           deposit_percent = 100
 
-        metro_station_name = None
-        item_metro_station_name = item.find(class_=metro_station_name_regex)
-        if item_metro_station_name:
-          metro_station_name = item_metro_station_name.text
-
         parsing_result = ParsingResult(
           direct_link=direct_link,
-          floor=floor,
-          flat_area=flat_area,
           price=price,
           commission_percent=commission_percent,
           deposit_percent=deposit_percent,
-          metro_station_name=metro_station_name,
         )
         result.append(parsing_result)
 
