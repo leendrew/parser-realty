@@ -13,7 +13,7 @@ logger = Logger().get_instance()
 class Fetcher:
   def __init__(self) -> None:
     self.__instance = Session()
-    self.__user_agent = FakeUserAgent()
+    self.__user_agent = FakeUserAgent(platforms="pc")
 
   @staticmethod
   async def retry(
