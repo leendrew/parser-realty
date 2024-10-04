@@ -1,20 +1,18 @@
-from fastapi import APIRouter
-from src.shared import Logger
+# from fastapi import APIRouter
+# from src.shared import Logger
 # from .parsing_result_service import ParsingResultServiceDependency
 # from ..search_links.search_link_service import SearchLinkServiceDependency
 # from ..search_links.search_link_types import SourceName
 # from ..users_search_links.user_search_link_service import UserSearchLinkServiceDependency
 # from src.parsing.parsing_service import ParsingServiceDependency
 
-logger = Logger().get_instance()
+# logger = Logger().get_instance()
 
 # from asyncio import create_task, gather
 
-router = APIRouter(
-  # prefix="/parsing-results",
-  # TODO: перед деплоем удалить, вернуть то, что выше
-  prefix="/test",
-)
+# router = APIRouter(
+#   prefix="/parsing-results",
+# )
 
 # @router.get("/")
 # async def get_parsing_results(
@@ -32,7 +30,7 @@ router = APIRouter(
   # res = await parsing_service.parse_test(source=SourceName.avito)
   # return res
 
-  # TODO: try except
+  # # try except
   # await parsing_result_service.create_many(result)
   # users_search_links = await user_search_link_service.get_all_by(
   #   user_id=user_id,

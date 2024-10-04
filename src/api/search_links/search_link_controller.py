@@ -1,50 +1,50 @@
-from fastapi import (
-  APIRouter,
-  HTTPException,
-)
-from src.shared import Logger
-from .search_link_service import SearchLinkServiceDependency
-from .search_link_dtos import (
-  CreateOnePayloadDto,
-  GetAllByQueryDtoDependency,
-  EditOnePayloadDto,
-)
-from ..users.user_service import UserServiceDependency
+# from fastapi import (
+#   APIRouter,
+#   HTTPException,
+# )
+# from src.shared import Logger
+# from .search_link_service import SearchLinkServiceDependency
+# from .search_link_dtos import (
+#   CreateOnePayloadDto,
+#   GetAllByQueryDtoDependency,
+#   EditOnePayloadDto,
+# )
+# from ..users.user_service import UserServiceDependency
 
-logger = Logger().get_instance()
+# logger = Logger().get_instance()
 
-router = APIRouter(
-  prefix="/search-links",
-)
+# router = APIRouter(
+#   prefix="/search-links",
+# )
 
-@router.post("/")
-async def create_one(
-  search_link_service: SearchLinkServiceDependency,
-  user_service: UserServiceDependency,
-  payload: CreateOnePayloadDto,
-):
-  user = await user_service.get_one(id=payload.user_id)
-  if not user:
-    logger.error(f"Пользователь с id \"{id}\" не найден")
-    # TODO: correct status code
-    raise HTTPException(
-      status_code=400,
-      detail="Пользователь не найден",
-    )
+# @router.post("/")
+# async def create_one(
+#   search_link_service: SearchLinkServiceDependency,
+#   user_service: UserServiceDependency,
+#   payload: CreateOnePayloadDto,
+# ):
+#   user = await user_service.get_one(id=payload.user_id)
+#   if not user:
+#     logger.error(f"Пользователь с id \"{id}\" не найден")
+#     # TODO: correct status code
+#     raise HTTPException(
+#       status_code=400,
+#       detail="Пользователь не найден",
+#     )
 
-  try:
-    result = await search_link_service.create_one_to_user(
-      search_type=payload.search_type,
-      name=payload.name,
-      link=payload.link,
-      source_name=payload.source_name,
-      user=user,
-    )
+#   try:
+#     result = await search_link_service.create_one_to_user(
+#       search_type=payload.search_type,
+#       name=payload.name,
+#       link=payload.link,
+#       source_name=payload.source_name,
+#       user=user,
+#     )
 
-    return result
+#     return result
 
-  except Exception:
-    return {}
+#   except Exception:
+#     return {}
 
 # @router.get("/")
 # async def get_all(
