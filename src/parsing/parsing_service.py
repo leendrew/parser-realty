@@ -144,12 +144,13 @@ class ParsingService:
       raise ValueError(message)
 
     try:
-      d = ucd.Chrome()
-      d.get(link)
-      d.save_screenshot()
-      bytes_response = d.page_source
-      # fetch_response = await self.fetcher.get_with_retry(url=link)
-      # bytes_response = fetch_response.content
+      # d = ucd.Chrome()
+      # d.get(link)
+      # d.save_screenshot()
+      # bytes_response = d.page_source
+
+      fetch_response = await self.fetcher.get_with_retry(url=link)
+      bytes_response = fetch_response.content
 
       result = await method(markup=bytes_response)
 
