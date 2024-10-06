@@ -10,11 +10,10 @@ scheduler = AsyncIOScheduler()
 
 cron_interval_by_search_type_map = {
   SearchType.rent: {
-    "minute": "*/30",
+    "minute": "*/5",
   },
   SearchType.purchase: {
     "minute": "0",
-    "hour": "3",
   },
 }
 
