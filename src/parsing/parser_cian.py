@@ -23,7 +23,8 @@ class ParserCian(ParserBase):
     price_regex = re.compile(r"\d+")
 
     # [search-entry-frontend][master][be0ecda7]
-    container = body.find(attrs={"data-name": "ListingLayout"})
+    # container = body.find(attrs={"data-name": "ListingLayout"})
+    container = body.find(class_="card-list_responsive")
     if not container:
       message = f"Не нашел контейнер при парсинге источника \"{SourceName.cian.value}\""
       logger.error(message)

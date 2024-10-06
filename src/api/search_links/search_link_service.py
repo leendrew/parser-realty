@@ -25,7 +25,7 @@ from .search_link_types import (
 
 logger = Logger().get_instance()
 
-MAX_USER_LINKS_COUNT = 5
+MAX_USER_LINKS_COUNT = 6
 
 class SearchLinkService(BaseService):
   async def create_one_to_user(

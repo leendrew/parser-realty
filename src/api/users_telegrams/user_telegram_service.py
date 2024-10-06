@@ -27,7 +27,8 @@ def get_my_link_parsing_result_message(parsing_results: list[ParsingResultModel]
     deposit_percent = parsing_result.deposit_percent
     commission_percent = parsing_result.commission_percent
 
-    price_text = f"Цена – {parsing_result.price}"
+    formatted_price = f"{parsing_result.price:,}".replace(",", " ")
+    price_text = f"Цена – {formatted_price}"
     deposit_value_text = f"{deposit_percent}%" if deposit_percent is not None else no_value_text
     deposit_text = f"Залог – {deposit_value_text}"
     commission_value_text = f"{commission_percent}%" if commission_percent is not None else no_value_text

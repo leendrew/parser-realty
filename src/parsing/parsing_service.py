@@ -20,6 +20,8 @@ from src.api.search_links.search_link_types import (
 from src.models.parsing_result_model import ParsingResultModel
 from src.shared import db_service
 
+import undetected_chromedriver as ucd
+
 logger = Logger().get_instance()
 
 class ParsingService:
@@ -39,6 +41,7 @@ class ParsingService:
       parsing_result_service = ParsingResultService(session=session)
       user_telegram_service = UserTelegramService(session=session)
 
+      # TODO: перевыбрасывать все ошибки наверх
       try:
         user_search_links = await user_search_link_service.get_all_by(
           search_link_search_type=search_type,
@@ -141,8 +144,12 @@ class ParsingService:
       raise ValueError(message)
 
     try:
-      fetch_response = await self.fetcher.get_with_retry(url=link)
-      bytes_response = fetch_response.content
+      d = ucd.Chrome()
+      d.get(link)
+      d.save_screenshot()
+      bytes_response = d.page_source
+      # fetch_response = await self.fetcher.get_with_retry(url=link)
+      # bytes_response = fetch_response.content
 
       result = await method(markup=bytes_response)
 
