@@ -33,6 +33,7 @@ class ParserYandex(ParserBase):
     result: list[ParsingResult] = []
 
     items: ResultSet[Tag | NavigableString] | None = container.find_all(class_="OffersSerpItem__main")
+    logger.info(f"Parsing {SourceName.yandex.value}. Count items: {len(items)}")
     for item in items:
       try:
         item_link = item.find(name="a")

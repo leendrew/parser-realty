@@ -32,6 +32,7 @@ class ParserAvito(ParserBase):
     result: list[ParsingResult] = []
 
     items: ResultSet[Tag | NavigableString] | None = container.find_all(attrs={"data-marker": "item"})
+    logger.info(f"Parsing {SourceName.avito.value}. Count items: {len(items)}")
     for item in items:
       try:
         item_body = item.find(class_=item_body_regex)
