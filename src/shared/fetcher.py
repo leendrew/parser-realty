@@ -14,6 +14,11 @@ class Fetcher:
   def __init__(self) -> None:
     self.__instance = Session()
     self.__user_agent = FakeUserAgent(platforms="pc")
+    self.__instance.headers = {
+      "UserAgent": self.__user_agent.random,
+      "Accept": "text/html",
+      "Accept-Language": "ru",
+    }
 
   @staticmethod
   async def retry(
@@ -42,10 +47,6 @@ class Fetcher:
       return last_error
 
   async def get_with_retry(self, *args, **kwargs) -> Response | RequestException:
-    headers = kwargs.get("headers", {})
-    headers["user-agent"] = self.__user_agent.random
-    kwargs["headers"] = headers
-
     result = await self.retry(*args, **kwargs, fn=self.__instance.get)
 
     return result

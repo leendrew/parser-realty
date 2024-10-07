@@ -19,11 +19,11 @@ class Logger:
     path = os.path.join(dir, filename)
 
     level_by_env_map = {
-      AppEnv.development: logging.DEBUG,
+      AppEnv.development: logging.INFO,
       AppEnv.production: logging.ERROR,
     }
     level_by_env = level_by_env_map[config.app.env]
-    log_level = level or level_by_env
+    log_level = level if level is not None else level_by_env
 
     logging.basicConfig(
       filename=path,
