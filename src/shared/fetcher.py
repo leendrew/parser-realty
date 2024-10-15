@@ -12,10 +12,10 @@ logger = Logger().get_instance()
 
 class Fetcher:
   def __init__(self) -> None:
-    self.__instance = Session()
+    self.__requests = Session()
     self.__user_agent = FakeUserAgent(platforms="pc")
-    self.__instance.headers = {
-      "UserAgent": self.__user_agent.random,
+    self.__requests.headers = {
+      "User-Agent": self.__user_agent.random,
       "Accept": "text/html",
       "Accept-Language": "ru",
     }
@@ -35,7 +35,7 @@ class Fetcher:
         response = fn(*args, **kwargs)
 
         return response
-      
+
       except RequestException as e:
         last_error = e
         logger.exception(f"Запрос на парсинг страницы по ссылке упал на попытке: {attempt + 1}")
@@ -46,7 +46,7 @@ class Fetcher:
     if (last_error):
       return last_error
 
-  async def get_with_retry(self, *args, **kwargs) -> Response | RequestException:
-    result = await self.retry(*args, **kwargs, fn=self.__instance.get)
+  async def get_with_requests(self, *args, **kwargs) -> Response | RequestException:
+    result = await self.retry(*args, **kwargs, fn=self.__requests.get)
 
     return result

@@ -1,6 +1,10 @@
 from typing import Annotated
-from asyncio import gather
+from asyncio import (
+  gather,
+  sleep,
+)
 from fastapi import Depends
+import logging
 from src.shared import (
   Logger,
   Fetcher,
@@ -17,12 +21,15 @@ from src.api.search_links.search_link_types import (
   SourceName,
   SearchType,
 )
+from selenium.webdriver import (
+  Chrome,
+  ChromeOptions,
+)
 from src.models.parsing_result_model import ParsingResultModel
 from src.shared import db_service
 
-import undetected_chromedriver as ucd
-
 logger = Logger().get_instance()
+logger.setLevel(level=logging.INFO)
 
 class ParsingService:
   def __init__(self) -> None:
@@ -41,7 +48,6 @@ class ParsingService:
       parsing_result_service = ParsingResultService(session=session)
       user_telegram_service = UserTelegramService(session=session)
 
-      # TODO: перевыбрасывать все ошибки наверх
       try:
         user_search_links = await user_search_link_service.get_all_by(
           search_link_search_type=search_type,
@@ -58,38 +64,39 @@ class ParsingService:
 
         link_results: list[list[ParsingResult]] = await gather(*link_results_tasks)
 
-        parsing_results_tasks = []
+        new_parsing_results: list[list[ParsingResultModel]] = []
         for (index, link_result) in enumerate(link_results):
           user_search_link = user_search_links[index]
 
-          task = parsing_result_service.create_unique(
+          new_parsing_result = await parsing_result_service.create_unique(
             payload=link_result,
             user_search_link=user_search_link,
           )
-          parsing_results_tasks.append(task)
-
-        new_parsing_results: list[list[ParsingResultModel]] = await gather(*parsing_results_tasks)
+          new_parsing_results.append(new_parsing_result)
 
         notify_telegram_users_tasks = []
         for new_results in new_parsing_results:
           if not new_results:
             continue
 
-          new_result_first = new_results[0]
-          user_search_link = await user_search_link_service.get_one_by(id=new_result_first.user_search_link_id)
+          first_new_result = new_results[0]
+          user_search_link = await user_search_link_service.get_one_by(id=first_new_result.user_search_link_id)
           telegram_user = await user_telegram_service.get_one_by_user_id(user_id=user_search_link.user_id)
 
-          task = user_telegram_service.notify_telegram_user(
-            user_telegram_id=telegram_user.telegram_id,
-            link_name=user_search_link.search_link.name,
-            parsing_results=new_results,
-          )
-          notify_telegram_users_tasks.append(task)
+          chunk_size = 20
+          for index in range(0, len(new_results), chunk_size):
+            sublist = new_results[index:index + chunk_size]
+            task = user_telegram_service.notify_telegram_user(
+              user_telegram_id=telegram_user.telegram_id,
+              link_name=user_search_link.search_link.name,
+              parsing_results=sublist,
+            )
+            notify_telegram_users_tasks.append(task)
 
         await gather(*notify_telegram_users_tasks)
 
       except Exception:
-        logger.exception("@@@ Пизда")
+        logger.exception("FATAL")
 
   async def parse_and_proceed(
     self,
@@ -144,13 +151,18 @@ class ParsingService:
       raise ValueError(message)
 
     try:
-      # d = ucd.Chrome()
-      # d.get(link)
-      # d.save_screenshot()
-      # bytes_response = d.page_source
+      options = ChromeOptions()
+      options.add_argument("--headless")
+      options.add_argument("--disable-dev-shm-usage")
+      options.add_argument("--disable-gpu")
+      options.add_argument("--no-sandbox")
+      options.add_argument("--window-size=1920,1080")
 
-      fetch_response = await self.fetcher.get_with_retry(url=link)
-      bytes_response = fetch_response.content
+      driver = Chrome(options=options)
+      driver.get(url=link)
+      await sleep(3)
+      bytes_response = driver.page_source
+      driver.close()
 
       result = await method(markup=bytes_response)
 

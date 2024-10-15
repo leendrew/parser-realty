@@ -30,7 +30,5 @@ async def parse_purchase_job() -> None:
 scheduler.add_job(
   parse_rent_job,
   "cron",
-  minute="*/5",
+  minute="*/2",
 )
-
-# scheduler.print_jobs()
