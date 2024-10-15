@@ -8,23 +8,12 @@ logger = Logger().get_instance()
 
 scheduler = AsyncIOScheduler()
 
-cron_interval_by_search_type_map = {
-  SearchType.rent: {
-    "minute": "*/5",
-  },
-  SearchType.purchase: {
-    "minute": "0",
-  },
-}
-
 async def parse_rent_job() -> None:
   parsing_service = ParsingService()
-  print("start job rent")
   create_task(parsing_service.dispatch(SearchType.rent))
 
 async def parse_purchase_job() -> None:
   parsing_service = ParsingService()
-  print("start job purchase")
   create_task(parsing_service.dispatch(SearchType.purchase))
 
 scheduler.add_job(
