@@ -10,7 +10,7 @@ dev-up-bot:
 	python3 -m src.tg_bot.main
 
 compose-prod-build-app:
-	docker compose --env-file $(ENV_PATH_PROD) -f $(COMPOSE_PATH_PROD) build app 
+	docker compose --env-file $(ENV_PATH_PROD) -f $(COMPOSE_PATH_PROD) build app
 
 compose-prod-up-app:
 	docker compose --env-file $(ENV_PATH_PROD) -f $(COMPOSE_PATH_PROD) up app -d

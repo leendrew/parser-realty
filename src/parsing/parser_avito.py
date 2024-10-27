@@ -53,9 +53,8 @@ class ParserAvito(ParserBase):
           commission_raw = arr[1]
 
           deposit_matches = re.findall(pattern=deposit_regex, string=deposit_raw)
-          deposit = int("".join(deposit_matches))
-          deposit_percent = 0
-          if deposit:
+          if deposit_matches:
+            deposit = int("".join(deposit_matches))
             deposit_percent = int(deposit / price * 100)
 
           commission_match = re.search(pattern=commission_percent_regex, string=commission_raw)
