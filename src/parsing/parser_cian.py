@@ -32,7 +32,7 @@ class ParserCian(ParserBase):
     result: list[ParsingResult] = []
     for item in items:
       try:
-        item_content_container = item.find(class_=card_container_regex)
+        item_content_container = item.find(attrs={"data-name": "LinkArea"})
 
         item_link = item_content_container.find(name="a")
         direct_link = item_link.get("href")
