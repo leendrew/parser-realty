@@ -19,11 +19,10 @@ class ParserCian(ParserBase):
     soup = self.parser.with_lxml(markup=markup)
     body = soup.find(name="body")
 
-    card_container_regex = re.compile(r"card__content")
+    card_container_regex = re.compile(r"content")
     price_regex = re.compile(r"\d+")
 
-    # [search-entry-frontend][master][be0ecda7]
-    items: ResultSet[Tag | NavigableString] | None = body.find_all(attrs={"data-name": "CardContainer"})
+    items: ResultSet[Tag | NavigableString] | None = body.find_all(attrs={"data-name": "CardComponent"})
     logger.info(f"Parsing {SourceName.cian.value}. Count items: {len(items)}")
     if not items:
       message = f"Не нашел контейнер при парсинге источника \"{SourceName.cian.value}\""
@@ -38,7 +37,7 @@ class ParserCian(ParserBase):
         item_link = item_content_container.find(name="a")
         direct_link = item_link.get("href")
 
-        item_price_container = item_content_container.find(attrs={"data-name": "PriceLayout"})
+        item_price_container = item_content_container.find(attrs={"data-mark": "MainPrice"})
         price_raw = item_price_container.text
         price_matches = re.findall(pattern=price_regex, string=price_raw)
         price = int("".join(price_matches))
