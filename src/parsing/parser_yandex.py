@@ -47,16 +47,17 @@ class ParserYandex(ParserBase):
         commission_percent = 0
         deposit_percent = 0
         item_tags_container = item.find(class_=tags_regex)
-        tags_raw = item_tags_container.text.strip()
+        if item_tags_container:
+          tags_raw = item_tags_container.text.strip()
 
-        commission_match = re.search(pattern=commission_regex, string=tags_raw)
-        if commission_match:
-          commission = commission_match.group(1)
-          commission_percent = int(commission)
+          commission_match = re.search(pattern=commission_regex, string=tags_raw)
+          if commission_match:
+            commission = commission_match.group(1)
+            commission_percent = int(commission)
 
-        deposit_match = re.search(pattern=deposit_regex, string=tags_raw)
-        if deposit_match:
-          deposit_percent = 100
+          deposit_match = re.search(pattern=deposit_regex, string=tags_raw)
+          if deposit_match:
+            deposit_percent = 100
 
         parsing_result = ParsingResult(
           direct_link=direct_link,
